@@ -4,6 +4,7 @@
 
 #include "../GameInfo.h"
 #include "Engine/GameInstance.h"
+#include "../DataTable/DataTableManager.h"
 #include "BaseGameInstance.generated.h"
 
 /**
@@ -17,6 +18,12 @@ class SOULHUNTER_API UBaseGameInstance : public UGameInstance
 public :
 	UBaseGameInstance();
 
+protected :
+	UDataTableManager* m_DataTableManager;
+
 public :
 	virtual void Init() override;
+
+public :
+	const UDataTableManager* GetDataTableManager() const;
 };
