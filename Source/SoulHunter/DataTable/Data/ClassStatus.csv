@@ -1,2 +1,2 @@
 ---,Key,HP,MP,Attack,Defence,WalkSpeed,RunSpeed,BattleWalkSpeed,BattleRunSpeed
-HeavyLancerStatus,HeavyLancerStatus,1000,100,10,20,100,600,100,600
+HeavyLancer,HeavyLancer,1000,100,10,20,100,600,100,600

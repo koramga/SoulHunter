@@ -7,6 +7,7 @@
 #include "TableRow/Skill/SkillTableRow.h"
 #include "TableRow/Status/ClassStatusTableRow.h"
 #include "TableRow/Status/StatusTableRow.h"
+#include "View/ClassViewRow.h"
 #include "UObject/NoExportTypes.h"
 #include "DataTableManager.generated.h"
 
@@ -30,4 +31,6 @@ private :
 public :
 	void Init();
 
+public :
+	bool SetClassViewRow(UClassViewRow* ClassViewRow, EPlayerClassType PlayerClassType) const;
 };

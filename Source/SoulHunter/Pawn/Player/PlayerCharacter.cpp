@@ -4,6 +4,7 @@
 #include "PlayerCharacter.h"
 #include "Animation/PlayerAnimInstance.h"
 #include "../../Controller/User/UserPlayerController.h"
+#include "../../GameInstance/BaseGameInstance.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -29,13 +30,15 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	m_ClassViewRow = NewObject<UClassViewRow>(this, UClassViewRow::StaticClass());
+
 	m_PlayerAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
 
 	SetPlayerClassType(EPlayerClassType::HeavyLancer);
 
 	//m_PlayerAnimInstance->SetPlayerClassType(EPlayerClassType::Lance);
 
-	GetCharacterMovement()->MaxWalkSpeed = 100.f;
+	GetCharacterMovement()->MaxWalkSpeed = m_ClassViewRow->GetClassStatusTableRow()->WalkSpeed;
 
 	m_DilationToggle = false;
 }
@@ -212,13 +215,13 @@ void APlayerCharacter::__InputToggleWalkAndRun()
 	{
 		m_ToggleWalkAndRun = EToggleWalkAndRun::Run;
 
-		GetCharacterMovement()->MaxWalkSpeed = 600.f;
+		GetCharacterMovement()->MaxWalkSpeed = m_ClassViewRow->GetClassStatusTableRow()->RunSpeed;
 	}
 	else if (EToggleWalkAndRun::Run == m_ToggleWalkAndRun)
 	{
 		m_ToggleWalkAndRun = EToggleWalkAndRun::Walk;
 
-		GetCharacterMovement()->MaxWalkSpeed = 100.f;
+		GetCharacterMovement()->MaxWalkSpeed = m_ClassViewRow->GetClassStatusTableRow()->WalkSpeed;
 	}
 
 	UpdateMoveAnimation();
@@ -296,37 +299,43 @@ void APlayerCharacter::AddArmPitch(float Value)
 
 void APlayerCharacter::SetPlayerClassType(EPlayerClassType PlayerClassType)
 {
-	FName LSocketName;
-	FName RSocketName;
-
-	FString LMeshPath;
-	FString RMeshPath;
-
-	m_PlayerAnimInstance->SetPlayerClassType(PlayerClassType);
-
-	switch (PlayerClassType)
+	if (m_PlayerAnimInstance->GetPlayerClassType() != PlayerClassType)
 	{
-	case EPlayerClassType::HeavyLancer :
-		LSocketName = L"HeavyLancerWeaponSocket";
-		LMeshPath = TEXT("StaticMesh'/Game/Heavy_Lancer_Set/mesh/SM_lance.SM_lance'");
-		RSocketName = L"HeavyLancerShieldSocket";
-		RMeshPath = TEXT("StaticMesh'/Game/Weapon_Pack/Mesh/Weapons/Weapons_Kit/SM_Shield.SM_Shield'");
-		break;
+		if (DATATABLEMANAGER->SetClassViewRow(m_ClassViewRow, PlayerClassType))
+		{
+			FName LSocketName;
+			FName RSocketName;
+
+			FString LMeshPath;
+			FString RMeshPath;
+
+			m_PlayerAnimInstance->SetPlayerClassType(PlayerClassType);
+
+			switch (PlayerClassType)
+			{
+			case EPlayerClassType::HeavyLancer:
+				LSocketName = L"HeavyLancerWeaponSocket";
+				LMeshPath = TEXT("StaticMesh'/Game/Heavy_Lancer_Set/mesh/SM_lance.SM_lance'");
+				RSocketName = L"HeavyLancerShieldSocket";
+				RMeshPath = TEXT("StaticMesh'/Game/Weapon_Pack/Mesh/Weapons/Weapons_Kit/SM_Shield.SM_Shield'");
+				break;
+			}
+
+			UStaticMesh* LMesh = LoadObject<UStaticMesh>(nullptr, *LMeshPath);
+			UStaticMesh* RMesh = LoadObject<UStaticMesh>(nullptr, *RMeshPath);
+
+			if (IsValid(LMesh))
+			{
+				m_LHandMeshComponent->SetStaticMesh(LMesh);
+			}
+
+			if (IsValid(RMesh))
+			{
+				m_RHandMeshComponent->SetStaticMesh(RMesh);
+			}
+
+			bool Attach = m_LHandMeshComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, LSocketName);
+			m_RHandMeshComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, RSocketName);
+		}
 	}
-
-	UStaticMesh* LMesh = LoadObject<UStaticMesh>(nullptr, *LMeshPath);
-	UStaticMesh* RMesh = LoadObject<UStaticMesh>(nullptr, *RMeshPath);
-
-	if (IsValid(LMesh))
-	{
-		m_LHandMeshComponent->SetStaticMesh(LMesh);
-	}
-
-	if (IsValid(RMesh))
-	{
-		m_RHandMeshComponent->SetStaticMesh(RMesh);
-	}
-
-	bool Attach = m_LHandMeshComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, LSocketName);
-	m_RHandMeshComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, RSocketName);
 }

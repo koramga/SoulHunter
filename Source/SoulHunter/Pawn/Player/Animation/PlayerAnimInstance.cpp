@@ -5,7 +5,7 @@
 
 UPlayerAnimInstance::UPlayerAnimInstance()
 {
-	m_PlayerClassType = EPlayerClassType::None;
+	m_PlayerClassType = EPlayerClassType::Max;
 }
 
 void UPlayerAnimInstance::SetPlayerClassType(EPlayerClassType PlayerClassType)

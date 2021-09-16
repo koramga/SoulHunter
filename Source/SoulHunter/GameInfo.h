@@ -12,8 +12,9 @@
 DECLARE_LOG_CATEGORY_EXTERN(UE8, Log, All)
 #define LOG_CALLINFO		(FString(__FUNCTION__) + TEXT("{") + FString::FromInt(__LINE__) + TEXT("}"))
 #define LOG(Format, ...)	UE_LOG(UE8, Warning, TEXT("%s : %s"), *LOG_CALLINFO, *FString::Printf(Format, ##__VA_ARGS__))
-#define GAMEINSTANCE		Cast<UUnrealPortfolioGameInstance>(GetWorld()->GetGameInstance())
+#define BASEGAMEINSTANCE	Cast<UBaseGameInstance>(GetWorld()->GetGameInstance())
 #define PLAYERCONTROLLER	Cast<AUserPlayerController>(UGameplayStatics::GetPlayerController(GetWorld(), 0))
+#define DATATABLEMANAGER	BASEGAMEINSTANCE->GetDataTableManager()
 
 void PrintViewport(float Duration, const FColor& Color, const FString& strText);
 void PlaySoundAtLocation(UWorld* World, USoundBase* Sound, const FVector& Location);
@@ -68,9 +69,12 @@ enum class EToggleWalkAndRun : uint8
 UENUM(BlueprintType)
 enum class EPlayerClassType : uint8
 {
-	None,
 	HeavyLancer,
+	Max,
 };
+
+FName ConvertPlayerClassTypeToString(EPlayerClassType PlayerClassType);
+EPlayerClassType ConvertNameToPlayerClassType(const FName& Name);
 
 UENUM(BlueprintType)
 enum class EItemType : uint8

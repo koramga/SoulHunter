@@ -39,6 +39,9 @@ protected :
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
 	bool m_DilationToggle;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
+	class UClassViewRow* m_ClassViewRow;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

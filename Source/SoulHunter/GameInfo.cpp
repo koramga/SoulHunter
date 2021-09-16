@@ -43,3 +43,29 @@ void PlaySoundAtLocation(APawnCharacter* PawnCharacter, USoundBase* Sound)
 {
 	return PlaySoundAtLocation(PawnCharacter->GetWorld(), Sound, PawnCharacter->GetActorLocation());
 }
+
+FName ConvertPlayerClassTypeToString(EPlayerClassType PlayerClassType)
+{
+	switch (PlayerClassType)
+	{
+	case EPlayerClassType::HeavyLancer :
+		return TEXT("HeavyLancer");
+	}
+
+	return TEXT("");
+}
+
+EPlayerClassType ConvertNameToPlayerClassType(const FName& Name)
+{
+	for (int i = 0; i < static_cast<int>(EPlayerClassType::Max); ++i)
+	{
+		EPlayerClassType Type = static_cast<EPlayerClassType>(i);
+
+		if (ConvertPlayerClassTypeToString(Type) == Name)
+		{
+			return Type;
+		}
+	}
+
+	return EPlayerClassType::Max;
+}

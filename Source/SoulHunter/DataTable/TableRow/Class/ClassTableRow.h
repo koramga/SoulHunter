@@ -24,5 +24,5 @@ struct FClassTableRow
 	FName			ClassStatusKey;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	TArray<FName>	ComboKeys;
+	TArray<FName>	SkillKeys;
 };
