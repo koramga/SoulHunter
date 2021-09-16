@@ -5,15 +5,15 @@
 
 UPlayerAnimInstance::UPlayerAnimInstance()
 {
-	m_PlayerWeaponType = EPlayerWeaponType::None;
+	m_PlayerClassType = EPlayerClassType::None;
 }
 
-void UPlayerAnimInstance::SetPlayerWeaponType(EPlayerWeaponType WeaponType)
+void UPlayerAnimInstance::SetPlayerClassType(EPlayerClassType PlayerClassType)
 {
-	m_PlayerWeaponType = WeaponType;
+	m_PlayerClassType = PlayerClassType;
 }
 
-EPlayerWeaponType UPlayerAnimInstance::GetPlayerWeaponType() const
+EPlayerClassType UPlayerAnimInstance::GetPlayerClassType() const
 {
-	return m_PlayerWeaponType;
+	return m_PlayerClassType;
 }

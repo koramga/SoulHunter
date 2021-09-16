@@ -66,8 +66,21 @@ enum class EToggleWalkAndRun : uint8
 };
 
 UENUM(BlueprintType)
-enum class EPlayerWeaponType : uint8
+enum class EPlayerClassType : uint8
 {
 	None,
+	HeavyLancer,
+};
+
+UENUM(BlueprintType)
+enum class EItemType : uint8
+{
+	Weapon,
+	Shield,
+};
+
+UENUM(BlueprintType)
+enum class EWeaponType : uint8
+{
 	Lance,
 };

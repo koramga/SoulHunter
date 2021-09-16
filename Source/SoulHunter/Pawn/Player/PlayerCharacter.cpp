@@ -31,9 +31,9 @@ void APlayerCharacter::BeginPlay()
 
 	m_PlayerAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
 
-	SetPlayerWeaponType(EPlayerWeaponType::Lance);
+	SetPlayerClassType(EPlayerClassType::HeavyLancer);
 
-	//m_PlayerAnimInstance->SetPlayerWeaponType(EPlayerWeaponType::Lance);
+	//m_PlayerAnimInstance->SetPlayerClassType(EPlayerClassType::Lance);
 
 	GetCharacterMovement()->MaxWalkSpeed = 100.f;
 
@@ -294,7 +294,7 @@ void APlayerCharacter::AddArmPitch(float Value)
 	m_Arm->SetRelativeRotation(Rotator);
 }
 
-void APlayerCharacter::SetPlayerWeaponType(EPlayerWeaponType PlayerWeaponType)
+void APlayerCharacter::SetPlayerClassType(EPlayerClassType PlayerClassType)
 {
 	FName LSocketName;
 	FName RSocketName;
@@ -302,11 +302,11 @@ void APlayerCharacter::SetPlayerWeaponType(EPlayerWeaponType PlayerWeaponType)
 	FString LMeshPath;
 	FString RMeshPath;
 
-	m_PlayerAnimInstance->SetPlayerWeaponType(PlayerWeaponType);
+	m_PlayerAnimInstance->SetPlayerClassType(PlayerClassType);
 
-	switch (PlayerWeaponType)
+	switch (PlayerClassType)
 	{
-	case EPlayerWeaponType::Lance :
+	case EPlayerClassType::HeavyLancer :
 		LSocketName = L"HeavyLancerWeaponSocket";
 		LMeshPath = TEXT("StaticMesh'/Game/Heavy_Lancer_Set/mesh/SM_lance.SM_lance'");
 		RSocketName = L"HeavyLancerShieldSocket";

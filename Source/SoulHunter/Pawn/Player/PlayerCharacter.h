@@ -66,7 +66,7 @@ private :
 
 public :
 	void AddArmPitch(float Value);
-	void SetPlayerWeaponType(EPlayerWeaponType PlayerWeaponType);
+	void SetPlayerClassType(EPlayerClassType PlayerClassType);
 
 public :
 	virtual bool CanMove();

@@ -19,10 +19,10 @@ public:
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
-	EPlayerWeaponType	m_PlayerWeaponType;
+	EPlayerClassType	m_PlayerClassType;
 
 public :
-	void SetPlayerWeaponType(EPlayerWeaponType WeaponType);
-	EPlayerWeaponType GetPlayerWeaponType() const;
+	void SetPlayerClassType(EPlayerClassType PlayerClassType);
+	EPlayerClassType GetPlayerClassType() const;
 	
 };
