@@ -106,12 +106,12 @@ void UPawnAnimInstance::SetPawnAnimType(EPawnAnimType PawnAnimType, bool EndAnim
 
 		if (EPawnAnimType::Attack == m_PawnAnimType)
 		{
-			if (m_ComboType > 0)
-			{
-				//추출한다.
-				UpdateAnimCombo(m_PawnAnimCombo, m_AttackType, m_ComboType);
-				m_PawnAnimCombo->StartAnimMontage(this);
-			}
+			UpdateAnimCombo(m_PawnAnimCombo, m_AttackType, m_ComboType);
+			m_PawnAnimCombo->StartAnimMontage(this);
+			//if (m_ComboType > 0)
+			//{
+			//	//추출한다.
+			//}
 		}
 	}
 }
