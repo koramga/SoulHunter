@@ -3,19 +3,23 @@
 #pragma once
 
 #include "../../../GameInfo.h"
-#include "StatusTableRow.generated.h"
+#include "PawnCharacterTR.generated.h"
 
 /**
  * 
  */
+
 USTRUCT(BlueprintType)
-struct FStatusTableRow
+struct FPawnCharacterTR
 	: public FTableRowBase
 {
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	FName	Key;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	FName	Name;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	int32	HP;

@@ -53,13 +53,6 @@ enum class EDirection : uint8
 };
 
 UENUM(BlueprintType)
-enum class EGender : uint8
-{
-	Male,
-	Female,
-};
-
-UENUM(BlueprintType)
 enum class EToggleWalkAndRun : uint8
 {
 	Walk,
@@ -88,3 +81,15 @@ enum class EWeaponType : uint8
 {
 	Lance,
 };
+
+UENUM(BlueprintType)
+enum class EPlayerCharacterType : uint8
+{
+	MaleMannequin,
+	FemaleMannequin,
+	Haena,	
+	Max,
+};
+
+FName ConvertPlayerCharacterTypeToString(EPlayerCharacterType PlayerCharacterType);
+EPlayerCharacterType ConvertPlayerCharacterTypeToPlayerCharacterType(const FName& Name);

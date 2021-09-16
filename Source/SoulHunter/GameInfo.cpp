@@ -69,3 +69,35 @@ EPlayerClassType ConvertNameToPlayerClassType(const FName& Name)
 
 	return EPlayerClassType::Max;
 }
+
+FName ConvertPlayerCharacterTypeToString(EPlayerCharacterType PlayerCharacterType)
+{
+	switch (PlayerCharacterType)
+	{
+	case EPlayerCharacterType::MaleMannequin:
+		return TEXT("MaleMannequin");
+
+	case EPlayerCharacterType::FemaleMannequin:
+		return TEXT("FemaleMannequin");
+
+	case EPlayerCharacterType::Haena:
+		return TEXT("Haena");
+	}
+
+	return TEXT("Max");
+}
+
+EPlayerCharacterType ConvertPlayerCharacterTypeToPlayerCharacterType(const FName& Name)
+{
+	for (int i = 0; i < static_cast<int>(EPlayerCharacterType::Max); ++i)
+	{
+		EPlayerCharacterType Type = static_cast<EPlayerCharacterType>(i);
+
+		if (ConvertPlayerCharacterTypeToString(Type) == Name)
+		{
+			return Type;
+		}
+	}
+
+	return EPlayerCharacterType::Max;
+}

@@ -2,22 +2,21 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
-#include "UObject/NoExportTypes.h"
-#include "SkillViewRow.generated.h"
+#include "../../../../GameInfo.h"
+#include "PlayerClassSkillTR.generated.h"
 
 /**
  * 
  */
-UCLASS()
-class SOULHUNTER_API USkillViewRow : public UObject
+USTRUCT(BlueprintType)
+struct FPlayerClassSkillTR
+	: public FTableRowBase
 {
 	GENERATED_BODY()
 
-protected :
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	FString		m_AnimPath;	
+	FName			Key;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	int32		m_ComboCount;
+	TArray<FString>	AnimPaths;			//BoneIndex에 종속적
 };

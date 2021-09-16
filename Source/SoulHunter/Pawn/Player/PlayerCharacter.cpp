@@ -20,6 +20,8 @@ APlayerCharacter::APlayerCharacter()
 	//Arm을 Root에 붙여준다.
 	m_Arm->SetupAttachment(RootComponent);
 
+	m_PlayerCharacterType = EPlayerCharacterType::Max;
+
 	//
 
 	//Camera를 Arm에 붙여준다.
@@ -30,7 +32,7 @@ void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	m_ClassViewRow = NewObject<UClassViewRow>(this, UClassViewRow::StaticClass());
+	m_PlayerVR = NewObject<UPlayerVR>(this, UPlayerVR::StaticClass());
 
 	m_PlayerAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
 
@@ -38,7 +40,7 @@ void APlayerCharacter::BeginPlay()
 
 	//m_PlayerAnimInstance->SetPlayerClassType(EPlayerClassType::Lance);
 
-	GetCharacterMovement()->MaxWalkSpeed = m_ClassViewRow->GetClassStatusTableRow()->WalkSpeed;
+	GetCharacterMovement()->MaxWalkSpeed = m_PlayerVR->GetPlayerCharacterTableRow()->WalkSpeed;
 
 	m_DilationToggle = false;
 }
@@ -215,13 +217,13 @@ void APlayerCharacter::__InputToggleWalkAndRun()
 	{
 		m_ToggleWalkAndRun = EToggleWalkAndRun::Run;
 
-		GetCharacterMovement()->MaxWalkSpeed = m_ClassViewRow->GetClassStatusTableRow()->RunSpeed;
+		GetCharacterMovement()->MaxWalkSpeed = m_PlayerVR->GetPlayerCharacterTableRow()->RunSpeed;
 	}
 	else if (EToggleWalkAndRun::Run == m_ToggleWalkAndRun)
 	{
 		m_ToggleWalkAndRun = EToggleWalkAndRun::Walk;
 
-		GetCharacterMovement()->MaxWalkSpeed = m_ClassViewRow->GetClassStatusTableRow()->WalkSpeed;
+		GetCharacterMovement()->MaxWalkSpeed = m_PlayerVR->GetPlayerCharacterTableRow()->WalkSpeed;
 	}
 
 	UpdateMoveAnimation();
@@ -301,7 +303,7 @@ void APlayerCharacter::SetPlayerClassType(EPlayerClassType PlayerClassType)
 {
 	if (m_PlayerAnimInstance->GetPlayerClassType() != PlayerClassType)
 	{
-		if (DATATABLEMANAGER->SetClassViewRow(m_ClassViewRow, PlayerClassType))
+		if (DATATABLEMANAGER->SetPlayerVR(m_PlayerVR, m_PlayerCharacterType, PlayerClassType))
 		{
 			FName LSocketName;
 			FName RSocketName;

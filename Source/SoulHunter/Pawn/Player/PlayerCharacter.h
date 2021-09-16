@@ -40,7 +40,10 @@ protected :
 	bool m_DilationToggle;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
-	class UClassViewRow* m_ClassViewRow;
+	class UPlayerVR* m_PlayerVR;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
+	EPlayerCharacterType	m_PlayerCharacterType;
 
 protected:
 	// Called when the game starts or when spawned

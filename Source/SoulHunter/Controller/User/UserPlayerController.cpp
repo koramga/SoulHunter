@@ -74,7 +74,7 @@ void AUserPlayerController::PlayerTick(float DeltaTime)
 void AUserPlayerController::CameraShake()
 {
 	LOG(TEXT("Call Camera Shake"));
-	ClientPlayCameraShake(m_CameraShake);
+	ClientStartCameraShake(m_CameraShake);
 }
 
 void AUserPlayerController::SetupInputComponent()

@@ -2,27 +2,31 @@
 
 #pragma once
 
-#include "../../../GameInfo.h"
-#include "ClassTableRow.generated.h"
+#include "../PawnCharacterTR.h"
+#include "PlayerCharacterTR.generated.h"
+
 /**
  * 
  */
 
 USTRUCT(BlueprintType)
-struct FClassTableRow
-	: public FTableRowBase
+struct FPlayerCharacterTR
+	: public FPawnCharacterTR
 {
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	FName			Key;
+	int32	BoneIndex;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	FName			Name;
+	float	WalkSpeed;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	FName			ClassStatusKey;
+	float	RunSpeed;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-	TArray<FName>	SkillKeys;
+	float	BattleWalkSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	float	BattleRunSpeed;
 };

@@ -7,6 +7,8 @@
 
 AHaena::AHaena()
 {
+	m_PlayerCharacterType = EPlayerCharacterType::Haena;
+
 	m_Hair = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Hair"));
 	m_Hair->SetupAttachment(GetMesh());
 

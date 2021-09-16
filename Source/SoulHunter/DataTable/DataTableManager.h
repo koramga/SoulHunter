@@ -3,11 +3,10 @@
 #pragma once
 
 #include "../GameInfo.h"
-#include "TableRow/Class/ClassTableRow.h"
-#include "TableRow/Skill/SkillTableRow.h"
-#include "TableRow/Status/ClassStatusTableRow.h"
-#include "TableRow/Status/StatusTableRow.h"
-#include "View/ClassViewRow.h"
+#include "TableRow/Pawn/Player/PlayerCharacterTR.h"
+#include "TableRow/Pawn/Player/PlayerClassSkillTR.h"
+#include "TableRow/Pawn/Player/PlayerClassTR.h"
+#include "View/PlayerVR.h"
 #include "UObject/NoExportTypes.h"
 #include "DataTableManager.generated.h"
 
@@ -23,14 +22,13 @@ public :
 	UDataTableManager();
 
 private :
-	UDataTable* m_ClassDataTable;
-	UDataTable* m_SkillDataTable;
-	UDataTable* m_ClassStatusDataTable;
-	UDataTable* m_StatusDataTable;
+	UDataTable* m_PlayerCharacterDataTable;
+	UDataTable* m_PlayerClassSkillDataTable;
+	UDataTable* m_PlayerClassDataTable;
 
 public :
 	void Init();
 
 public :
-	bool SetClassViewRow(UClassViewRow* ClassViewRow, EPlayerClassType PlayerClassType) const;
+	bool SetPlayerVR(UPlayerVR* PlayerVR, EPlayerCharacterType PlayerCharacterType, EPlayerClassType PlayerClassType) const;
 };

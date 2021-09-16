@@ -24,5 +24,4 @@ protected:
 public :
 	void SetPlayerClassType(EPlayerClassType PlayerClassType);
 	EPlayerClassType GetPlayerClassType() const;
-	
 };
