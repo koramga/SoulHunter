@@ -71,6 +71,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis(TEXT("MoveForwardBack"), this, &APlayerCharacter::__InputMoveForwardBack);
 	PlayerInputComponent->BindAxis(TEXT("MoveLeftRight"), this, &APlayerCharacter::__InputMoveLeftRight);
 	PlayerInputComponent->BindAxis(TEXT("DirectionTypeKey"), this, &APlayerCharacter::__InputDirectionTypeKey);
+	PlayerInputComponent->BindAxis(TEXT("CombinationTypeKey"), this, &APlayerCharacter::__InputCombinationTypeKey);
 
 	PlayerInputComponent->BindAction(TEXT("ToggleWalkAndRun"), EInputEvent::IE_Pressed,
 		this, &APlayerCharacter::__InputToggleWalkAndRun);
@@ -86,6 +87,9 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 	PlayerInputComponent->BindAction(TEXT("AvoidKey"), EInputEvent::IE_DoubleClick,
 		this, &APlayerCharacter::__InputAvoidKey);
+
+	PlayerInputComponent->BindAction(TEXT("RollKey"), EInputEvent::IE_Pressed,
+		this, &APlayerCharacter::__InputRollKey);
 
 	//PlayerInputComponent->BindAction(TEXT("AttackKey"), EInputEvent::IE_Pressed,
 	//	this, &APlayerCharacter::__InputAttackKey);
@@ -187,8 +191,36 @@ void APlayerCharacter::__InputDirectionTypeKey(float Scale)
 	{
 		int32 Value = static_cast<int32>(Scale);
 
-		m_PlayerAnimInstance->SetDirection(static_cast<EDirection>(Value - 1));
+		if ((Value & 0x01) > 0)
+		{
+			//Forward
+			m_PlayerAnimInstance->SetDirection(EDirection::Forward);
+		}
+		else if ((Value & 0x02) > 0)
+		{
+			//Back
+			m_PlayerAnimInstance->SetDirection(EDirection::Back);
+		}
+		else if ((Value & 0x04) > 0)
+		{
+			//Left
+			m_PlayerAnimInstance->SetDirection(EDirection::Left);
+		}
+		else if ((Value & 0x08) > 0)
+		{
+			//Right
+			m_PlayerAnimInstance->SetDirection(EDirection::Right);
+		}
 	}
+}
+
+void APlayerCharacter::__InputCombinationTypeKey(float Scale)
+{
+	int32 Value = static_cast<int>(Scale);
+
+	ECombinationType CombinationType = static_cast<ECombinationType>(Scale);
+
+	m_PlayerAnimInstance->SetCombinationType(CombinationType);
 }
 
 void APlayerCharacter::__InputToggleWalkAndRun()
@@ -240,6 +272,11 @@ void APlayerCharacter::__InputAttackKey()
 void APlayerCharacter::__InputAvoidKey()
 {
 	m_PlayerAnimInstance->SetPawnAnimType(EPawnAnimType::Avoid);
+}
+
+void APlayerCharacter::__InputRollKey()
+{
+	m_PlayerAnimInstance->SetPawnAnimType(EPawnAnimType::Roll);
 }
 
 void APlayerCharacter::AddArmPitch(float Value)

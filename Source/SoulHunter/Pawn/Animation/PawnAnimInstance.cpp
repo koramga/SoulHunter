@@ -6,6 +6,9 @@
 UPawnAnimInstance::UPawnAnimInstance()
 {
 	m_PawnAnimType = EPawnAnimType::Idle;
+
+	m_Direction = m_InputDirection = EDirection::Forward;
+	m_CombinationType = m_InputCombinationType = ECombinationType::None;
 }
 
 void UPawnAnimInstance::NativeInitializeAnimation()
@@ -24,6 +27,24 @@ void UPawnAnimInstance::NativeInitializeAnimation()
 void UPawnAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
+
+	if (m_InputDirection != m_Direction)
+	{
+		if (EPawnAnimType::Avoid != m_PawnAnimType
+			&& EPawnAnimType::Attack != m_PawnAnimType
+			&& EPawnAnimType::Roll != m_PawnAnimType)
+		{
+			m_Direction = m_InputDirection;
+		}
+	}
+
+	if (m_InputCombinationType != m_CombinationType)
+	{
+		if (EPawnAnimType::Attack != m_PawnAnimType)
+		{
+			m_CombinationType = m_InputCombinationType;
+		}
+	}
 }
 
 void UPawnAnimInstance::AnimNotify_EnableCombo()
@@ -51,7 +72,7 @@ void UPawnAnimInstance::UpdatePawnType(EPawnAnimType BeforePawnAnimType, EPawnAn
 
 }
 
-void UPawnAnimInstance::UpdateAnimCombo(UPawnAnimCombo* PawnAnimCombo, EComboType ComboType, EDirection Direction)
+void UPawnAnimInstance::UpdateSpecialAnim(UPawnAnimCombo* PawnAnimCombo, EComboType ComboType, EDirection Direction, ECombinationType CombinationType)
 {
 
 }
@@ -116,12 +137,12 @@ void UPawnAnimInstance::SetPawnAnimType(EPawnAnimType PawnAnimType, bool EndAnim
 
 		if (EPawnAnimType::Attack == m_PawnAnimType)
 		{
-			UpdateAnimCombo(m_PawnAnimCombo, EComboType::Attack, m_Direction);
+			UpdateSpecialAnim(m_PawnAnimCombo, EComboType::Attack, m_Direction, m_CombinationType);
 			m_PawnAnimCombo->StartAnimMontage(this);
 		}
 		else if (EPawnAnimType::Defence == m_PawnAnimType)
 		{
-			UpdateAnimCombo(m_PawnAnimCombo, EComboType::Defence , m_Direction);
+			UpdateSpecialAnim(m_PawnAnimCombo, EComboType::Defence , m_Direction, m_CombinationType);
 			m_PawnAnimCombo->StartAnimMontage(this);
 		}
 	}
@@ -139,11 +160,12 @@ void UPawnAnimInstance::SetSpeed(float Speed)
 
 void UPawnAnimInstance::SetDirection(EDirection Direction)
 {
-	if (EPawnAnimType::Avoid != m_PawnAnimType
-		&& EPawnAnimType::Attack != m_PawnAnimType)
-	{
-		m_Direction = Direction;
-	}
+	m_InputDirection = Direction;
+}
+
+void UPawnAnimInstance::SetCombinationType(ECombinationType CombinationType)
+{
+	m_InputCombinationType = CombinationType;
 }
 
 EPawnAnimType UPawnAnimInstance::GetPawnAnimType() const
@@ -163,7 +185,12 @@ float UPawnAnimInstance::GetSpeed() const
 
 EDirection UPawnAnimInstance::GetDirection() const
 {
-	return m_Direction;
+	return m_InputDirection;
+}
+
+ECombinationType UPawnAnimInstance::GetCombinationType() const
+{
+	return m_InputCombinationType;
 }
 
 void UPawnAnimInstance::AddEndAnimationState(EPawnAnimType PawnAnimType)

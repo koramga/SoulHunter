@@ -6,6 +6,8 @@
 
 void UPlayerBaseAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration)
 {
+	Super::NotifyBegin(MeshComp, Animation, TotalDuration);
+
 	AddEndAnimationSequence(TEXT("MTMannequinHeavyLancerCombo1"));
 	AddEndAnimationSequence(TEXT("MTMannequinHeavyLancerCombo2"));
 	AddEndAnimationSequence(TEXT("MTMannequinHeavyLancerCombo3"));
@@ -18,7 +20,10 @@ void UPlayerBaseAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, U
 	AddEndAnimationSequence(TEXT("HeavyLancer_avoid_right"));
 	AddEndAnimationSequence(TEXT("HeavyLancer_avoid_back"));
 
-	Super::NotifyBegin(MeshComp, Animation, TotalDuration);
+	AddEndAnimationSequence(TEXT("HeavyLancer_roll_front"));
+	AddEndAnimationSequence(TEXT("HeavyLancer_roll_left"));
+	AddEndAnimationSequence(TEXT("HeavyLancer_roll_right"));
+	AddEndAnimationSequence(TEXT("HeavyLancer_roll_back"));
 }
 
 void UPlayerBaseAnimNotifyState::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime)

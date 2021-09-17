@@ -7,25 +7,30 @@
 
 UMannequinAnimInstance::UMannequinAnimInstance()
 {
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> Combo01MontageAsset(TEXT("AnimMontage'/Game/SoulHunter/Pawn/Player/Mannequin/Animation/HeavyLancer/MTMannequinHeavyLancerCombo1.MTMannequinHeavyLancerCombo1'"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> Attack01MontageAsset(TEXT("AnimMontage'/Game/SoulHunter/Pawn/Player/Mannequin/Animation/HeavyLancer/MTMannequinHeavyLancerCombo1.MTMannequinHeavyLancerCombo1'"));
 
-	if (Combo01MontageAsset.Succeeded())
-		m_HeavyLancerComboMontage.Add(Combo01MontageAsset.Object);
+	if (Attack01MontageAsset.Succeeded())
+		m_HeavyLancerAttackMontage.Add(Attack01MontageAsset.Object);
 
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> Combo02MontageAsset(TEXT("AnimMontage'/Game/SoulHunter/Pawn/Player/Mannequin/Animation/HeavyLancer/MTMannequinHeavyLancerCombo2.MTMannequinHeavyLancerCombo2'"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> Attack02MontageAsset(TEXT("AnimMontage'/Game/SoulHunter/Pawn/Player/Mannequin/Animation/HeavyLancer/MTMannequinHeavyLancerCombo2.MTMannequinHeavyLancerCombo2'"));
 
-	if (Combo02MontageAsset.Succeeded())
-		m_HeavyLancerComboMontage.Add(Combo02MontageAsset.Object);
+	if (Attack02MontageAsset.Succeeded())
+		m_HeavyLancerAttackMontage.Add(Attack02MontageAsset.Object);
 
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> Combo03MontageAsset(TEXT("AnimMontage'/Game/SoulHunter/Pawn/Player/Mannequin/Animation/HeavyLancer/MTMannequinHeavyLancerCombo3.MTMannequinHeavyLancerCombo3'"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> Attack03MontageAsset(TEXT("AnimMontage'/Game/SoulHunter/Pawn/Player/Mannequin/Animation/HeavyLancer/MTMannequinHeavyLancerCombo3.MTMannequinHeavyLancerCombo3'"));
 
-	if (Combo03MontageAsset.Succeeded())
-		m_HeavyLancerComboMontage.Add(Combo03MontageAsset.Object);
+	if (Attack03MontageAsset.Succeeded())
+		m_HeavyLancerAttackMontage.Add(Attack03MontageAsset.Object);
 
-	static ConstructorHelpers::FObjectFinder<UAnimMontage> Combo04MontageAsset(TEXT("AnimMontage'/Game/SoulHunter/Pawn/Player/Mannequin/Animation/HeavyLancer/MTMannequinHeavyLancerCombo4.MTMannequinHeavyLancerCombo4'"));
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> Attack04MontageAsset(TEXT("AnimMontage'/Game/SoulHunter/Pawn/Player/Mannequin/Animation/HeavyLancer/MTMannequinHeavyLancerCombo4.MTMannequinHeavyLancerCombo4'"));
 
-	if (Combo04MontageAsset.Succeeded())
-		m_HeavyLancerComboMontage.Add(Combo04MontageAsset.Object);
+	if (Attack04MontageAsset.Succeeded())
+		m_HeavyLancerAttackMontage.Add(Attack04MontageAsset.Object);
+
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> StrongAttack01MontageAsset(TEXT("AnimMontage'/Game/SoulHunter/Pawn/Player/Mannequin/Animation/HeavyLancer/MTMannequinHeavyLancerDash.MTMannequinHeavyLancerDash'"));
+
+	if (StrongAttack01MontageAsset.Succeeded())
+		m_HeavyLancerStrongAttackMontage.Add(StrongAttack01MontageAsset.Object);
 
 	static ConstructorHelpers::FObjectFinder<UAnimMontage> DefenceMontageAsset(TEXT("AnimMontage'/Game/SoulHunter/Pawn/Player/Mannequin/Animation/HeavyLancer/MTMannequinDefence.MTMannequinDefence'"));
 
@@ -50,39 +55,44 @@ void UMannequinAnimInstance::UpdatePawnType(EPawnAnimType BeforePawnAnimType, EP
 	Super::UpdatePawnType(BeforePawnAnimType, AfterPawnAnimType);
 }
 
-void UMannequinAnimInstance::UpdateAnimCombo(UPawnAnimCombo* PawnAnimCombo, EComboType ComboType, EDirection Direction)
+void UMannequinAnimInstance::UpdateSpecialAnim(UPawnAnimCombo* PawnAnimCombo, EComboType ComboType, EDirection Direction, ECombinationType CombinationType)
 {
 	if (EComboType::Attack == ComboType)
 	{
-		int Index = -1;
-		int ComboCount = 4;
-
-		switch (Direction)
+		if(ECombinationType::None == CombinationType)
 		{
-		case EDirection::Left:
-			Index = 3;
-			break;
-		case EDirection::Right:
-			Index = 2;
-			break;
-		case EDirection::Forward:
-			ComboCount = 3;
-			Index = 0;
-			break;
-		case EDirection::Back:
-			Index = 1;
-			break;
+			int Index = -1;
+			int ComboCount = 4;
+
+			switch (Direction)
+			{
+			case EDirection::Left:
+				Index = 3;
+				break;
+			case EDirection::Right:
+				Index = 2;
+				break;
+			case EDirection::Forward:
+				ComboCount = 3;
+				Index = 0;
+				break;
+			case EDirection::Back:
+				Index = 1;
+				break;
+			}
+
+			if (Index >= 0)
+			{
+				PawnAnimCombo->SetAnimMontage(m_HeavyLancerAttackMontage[Index], ComboCount);
+			}
 		}
-
-		if (Index >= 0)
+		else if (ECombinationType::Strong == CombinationType)
 		{
-			PawnAnimCombo->SetAnimMontage(m_HeavyLancerComboMontage[Index], ComboCount);
+			PawnAnimCombo->SetAnimMontage(m_HeavyLancerStrongAttackMontage[0]);
 		}
 	}
 	else if (EComboType::Defence == ComboType)
 	{
-		PrintViewport(1.f, FColor::Red, TEXT("UpdateAnimCOmbo Defence"));
-
 		PawnAnimCombo->SetAnimMontage(m_HeavyLancerDefenceMontage);
 	}
 }

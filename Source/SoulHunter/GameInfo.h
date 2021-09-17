@@ -30,6 +30,7 @@ enum class EPawnAnimType : uint8
 	Defence,
 	Attack,
 	Avoid,
+	Roll,
 	Max,
 };
 
@@ -50,6 +51,13 @@ enum class EDirection : uint8
 	Right,
 	Forward,
 	Back,
+};
+
+UENUM(BlueprintType)
+enum class ECombinationType : uint8
+{
+	None,
+	Strong,			//°­°ø°Ý
 };
 
 UENUM(BlueprintType)

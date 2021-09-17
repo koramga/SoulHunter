@@ -60,11 +60,13 @@ private :
 	void __InputMoveForwardBack(float Scale);
 	void __InputMoveLeftRight(float Scale);
 	void __InputDirectionTypeKey(float Scale);
+	void __InputCombinationTypeKey(float Scale);
 	void __InputToggleWalkAndRun();
 	void __InputToggleKey();
 	void __InputDefenceKey();
 	void __InputAttackKey();
 	void __InputAvoidKey();
+	void __InputRollKey();
 	void __InputForwardAvoidKey();
 	void __InputBackAvoidKey();
 	void __InputLeftAvoidKey();

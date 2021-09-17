@@ -16,7 +16,8 @@ class SOULHUNTER_API UMannequinAnimInstance : public UPlayerAnimInstance
 	GENERATED_BODY()
 
 protected :
-	TArray<UAnimMontage*>	m_HeavyLancerComboMontage;
+	TArray<UAnimMontage*>	m_HeavyLancerAttackMontage;
+	TArray<UAnimMontage*>	m_HeavyLancerStrongAttackMontage;
 	UAnimMontage*			m_HeavyLancerDefenceMontage;
 	bool					m_StartCombo;
 	
@@ -29,7 +30,7 @@ public:
 
 private :
 	virtual void UpdatePawnType(EPawnAnimType BeforePawnAnimType, EPawnAnimType AfterPawnAnimType) override;
-	virtual void UpdateAnimCombo(UPawnAnimCombo* PawnAnimCombo, EComboType ComboType, EDirection Direction) override;
+	virtual void UpdateSpecialAnim(UPawnAnimCombo* PawnAnimCombo, EComboType ComboType, EDirection Direction, ECombinationType CombinationType) override;
 
 protected :
 };
