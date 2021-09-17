@@ -70,8 +70,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 	PlayerInputComponent->BindAxis(TEXT("MoveForwardBack"), this, &APlayerCharacter::__InputMoveForwardBack);
 	PlayerInputComponent->BindAxis(TEXT("MoveLeftRight"), this, &APlayerCharacter::__InputMoveLeftRight);
-	PlayerInputComponent->BindAxis(TEXT("AttackTypeKey"), this, &APlayerCharacter::__InputAttackTypeKey);
-	PlayerInputComponent->BindAxis(TEXT("ComboTypeKey"), this, &APlayerCharacter::__InputComboTypeKey);
+	PlayerInputComponent->BindAxis(TEXT("DirectionTypeKey"), this, &APlayerCharacter::__InputDirectionTypeKey);
 
 	PlayerInputComponent->BindAction(TEXT("ToggleWalkAndRun"), EInputEvent::IE_Pressed,
 		this, &APlayerCharacter::__InputToggleWalkAndRun);
@@ -85,17 +84,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction(TEXT("AttackKey"), EInputEvent::IE_Pressed,
 		this, &APlayerCharacter::__InputAttackKey);
 
-	PlayerInputComponent->BindAction(TEXT("ForwardAvoidKey"), EInputEvent::IE_DoubleClick,
-		this, &APlayerCharacter::__InputForwardAvoidKey);
-
-	PlayerInputComponent->BindAction(TEXT("BackAvoidKey"), EInputEvent::IE_DoubleClick,
-		this, &APlayerCharacter::__InputBackAvoidKey);
-
-	PlayerInputComponent->BindAction(TEXT("LeftAvoidKey"), EInputEvent::IE_DoubleClick,
-		this, &APlayerCharacter::__InputLeftAvoidKey);
-
-	PlayerInputComponent->BindAction(TEXT("RightAvoidKey"), EInputEvent::IE_DoubleClick,
-		this, &APlayerCharacter::__InputRightAvoidKey);
+	PlayerInputComponent->BindAction(TEXT("AvoidKey"), EInputEvent::IE_DoubleClick,
+		this, &APlayerCharacter::__InputAvoidKey);
 
 	//PlayerInputComponent->BindAction(TEXT("AttackKey"), EInputEvent::IE_Pressed,
 	//	this, &APlayerCharacter::__InputAttackKey);
@@ -191,23 +181,13 @@ void APlayerCharacter::__InputMoveLeftRight(float Scale)
 	}
 }
 
-void APlayerCharacter::__InputAttackTypeKey(float Scale)
+void APlayerCharacter::__InputDirectionTypeKey(float Scale)
 {
-	m_AttackType = static_cast<int32>(Scale);
-
-	if (m_AttackType > 0)
+	if (Scale > 0)
 	{
-		m_AttackType--;
-	}
-}
+		int32 Value = static_cast<int32>(Scale);
 
-void APlayerCharacter::__InputComboTypeKey(float Scale)
-{
-	m_ComboType = static_cast<int32>(Scale);
-
-	if (m_ComboType > 0)
-	{
-		m_ComboType--;
+		m_PlayerAnimInstance->SetDirection(static_cast<EDirection>(Value - 1));
 	}
 }
 
@@ -257,27 +237,8 @@ void APlayerCharacter::__InputAttackKey()
 	m_PlayerAnimInstance->SetPawnAnimType(EPawnAnimType::Attack);
 }
 
-void APlayerCharacter::__InputForwardAvoidKey()
+void APlayerCharacter::__InputAvoidKey()
 {
-	m_PlayerAnimInstance->SetDirection(EDirection::Forward);
-	m_PlayerAnimInstance->SetPawnAnimType(EPawnAnimType::Avoid);
-}
-
-void APlayerCharacter::__InputBackAvoidKey()
-{
-	m_PlayerAnimInstance->SetDirection(EDirection::Back);
-	m_PlayerAnimInstance->SetPawnAnimType(EPawnAnimType::Avoid);
-}
-
-void APlayerCharacter::__InputLeftAvoidKey()
-{
-	m_PlayerAnimInstance->SetDirection(EDirection::Left);
-	m_PlayerAnimInstance->SetPawnAnimType(EPawnAnimType::Avoid);
-}
-
-void APlayerCharacter::__InputRightAvoidKey()
-{
-	m_PlayerAnimInstance->SetDirection(EDirection::Right);
 	m_PlayerAnimInstance->SetPawnAnimType(EPawnAnimType::Avoid);
 }
 

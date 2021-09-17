@@ -25,6 +25,9 @@ protected :
 	bool				m_EnableUpdateMontage;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
+	EComboType			m_ComboType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
 	int32				m_ComboIndex;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
@@ -36,6 +39,7 @@ public :
 	
 public :
 	void SetAnimMontage(UAnimMontage* AnimMontage, int32 ComboCount);
+	void SetAnimMontage(UAnimMontage* AnimMontage);
 	void StartAnimMontage(UAnimInstance* AnimInstance);
 	void UpdateAnimMontage(UAnimInstance* AnimInstance);
 

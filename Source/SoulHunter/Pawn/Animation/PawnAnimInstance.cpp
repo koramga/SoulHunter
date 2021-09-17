@@ -36,12 +36,22 @@ void UPawnAnimInstance::AnimNotify_DisableCombo()
 	m_PawnAnimCombo->SetEnableUpdateAnimMontage(false);
 }
 
+void UPawnAnimInstance::AnimNotify_EnableCounter()
+{
+	m_PawnAnimCombo->SetEnableUpdateAnimMontage(true);
+}
+
+void UPawnAnimInstance::AnimNotify_DisableCounter()
+{
+	m_PawnAnimCombo->SetEnableUpdateAnimMontage(false);
+}
+
 void UPawnAnimInstance::UpdatePawnType(EPawnAnimType BeforePawnAnimType, EPawnAnimType AfterPawnAnimType)
 {
 
 }
 
-void UPawnAnimInstance::UpdateAnimCombo(UPawnAnimCombo* PawnAnimCombo, int32 AttackType, int32 ComboType)
+void UPawnAnimInstance::UpdateAnimCombo(UPawnAnimCombo* PawnAnimCombo, EComboType ComboType, EDirection Direction)
 {
 
 }
@@ -106,12 +116,13 @@ void UPawnAnimInstance::SetPawnAnimType(EPawnAnimType PawnAnimType, bool EndAnim
 
 		if (EPawnAnimType::Attack == m_PawnAnimType)
 		{
-			UpdateAnimCombo(m_PawnAnimCombo, m_AttackType, m_ComboType);
+			UpdateAnimCombo(m_PawnAnimCombo, EComboType::Attack, m_Direction);
 			m_PawnAnimCombo->StartAnimMontage(this);
-			//if (m_ComboType > 0)
-			//{
-			//	//추출한다.
-			//}
+		}
+		else if (EPawnAnimType::Defence == m_PawnAnimType)
+		{
+			UpdateAnimCombo(m_PawnAnimCombo, EComboType::Defence , m_Direction);
+			m_PawnAnimCombo->StartAnimMontage(this);
 		}
 	}
 }
@@ -126,25 +137,10 @@ void UPawnAnimInstance::SetSpeed(float Speed)
 	m_Speed = Speed;
 }
 
-void UPawnAnimInstance::SetAttackType(int32 AttackType)
-{
-	if (EPawnAnimType::Attack != m_PawnAnimType)
-	{
-		m_AttackType = AttackType;
-	}
-}
-
-void UPawnAnimInstance::SetComboType(int32 ComboType)
-{
-	if (EPawnAnimType::Attack != m_PawnAnimType)
-	{
-		m_ComboType = ComboType;
-	}
-}
-
 void UPawnAnimInstance::SetDirection(EDirection Direction)
 {
-	if (EPawnAnimType::Avoid != m_PawnAnimType)
+	if (EPawnAnimType::Avoid != m_PawnAnimType
+		&& EPawnAnimType::Attack != m_PawnAnimType)
 	{
 		m_Direction = Direction;
 	}
@@ -163,16 +159,6 @@ float UPawnAnimInstance::GetAngle() const
 float UPawnAnimInstance::GetSpeed() const
 {
 	return m_Speed;
-}
-
-int32 UPawnAnimInstance::GetAttackType() const
-{
-	return m_AttackType;
-}
-
-int32 UPawnAnimInstance::GetComboType() const
-{
-	return m_ComboType;
 }
 
 EDirection UPawnAnimInstance::GetDirection() const

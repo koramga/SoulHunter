@@ -30,12 +30,6 @@ protected :
 	float				m_Angle;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
-	int32				m_AttackType;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
-	int32				m_ComboType;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
 	UPawnAnimState*		m_PawnAnimState;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
@@ -55,24 +49,26 @@ private :
 	UFUNCTION()
 	void AnimNotify_DisableCombo();
 
+	UFUNCTION()
+	void AnimNotify_EnableCounter();
+
+	UFUNCTION()
+	void AnimNotify_DisableCounter();
+
 protected :
 	virtual void UpdatePawnType(EPawnAnimType BeforePawnAnimType, EPawnAnimType AfterPawnAnimType);
-	virtual void UpdateAnimCombo(UPawnAnimCombo* PawnAnimCombo, int32 AttackType, int32 ComboType);
+	virtual void UpdateAnimCombo(UPawnAnimCombo* PawnAnimCombo, EComboType ComboType, EDirection Direction);
 
 public :
 	virtual void SetPawnAnimType(EPawnAnimType PawnAnimType, bool EndAnimationStateOffset = false);
 	void SetAngle(float Angle);
 	void SetSpeed(float Speed);
-	void SetAttackType(int32 AttackType);
-	void SetComboType(int32 ComboType);
 	void SetDirection(EDirection Direction);
 
 public :
 	virtual EPawnAnimType GetPawnAnimType() const;
 	float GetAngle() const;
 	float GetSpeed() const;
-	int32 GetAttackType() const;
-	int32 GetComboType() const;
 	EDirection GetDirection() const;
 
 public :

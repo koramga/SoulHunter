@@ -24,6 +24,14 @@ void UPawnAnimCombo::SetAnimMontage(UAnimMontage* AnimMontage, int32 ComboCount)
 	m_ComboCount = ComboCount;
 	m_ComboIndex = 1;
 	m_EnableUpdateMontage = false;
+	m_ComboType = EComboType::Attack;
+}
+
+void UPawnAnimCombo::SetAnimMontage(UAnimMontage* AnimMontage)
+{
+	m_ComboMontage = AnimMontage;
+	m_EnableUpdateMontage = false;
+	m_ComboType = EComboType::Defence;
 }
 
 void UPawnAnimCombo::StartAnimMontage(UAnimInstance* AnimInstance)
@@ -31,7 +39,17 @@ void UPawnAnimCombo::StartAnimMontage(UAnimInstance* AnimInstance)
 	if (IsValid(m_ComboMontage))
 	{
 		AnimInstance->Montage_Play(m_ComboMontage);
-		AnimInstance->Montage_SetNextSection(UPawnAnimCombo::GetComboStartName(m_ComboIndex), UPawnAnimCombo::GetComboEndeName(m_ComboIndex));
+
+		if (EComboType::Attack == m_ComboType)
+		{
+			AnimInstance->Montage_SetNextSection(UPawnAnimCombo::GetComboStartName(m_ComboIndex), UPawnAnimCombo::GetComboEndeName(m_ComboIndex));
+		}
+		else if (EComboType::Defence == m_ComboType)
+		{
+			AnimInstance->Montage_SetNextSection(TEXT("Start"), TEXT("End"));
+			//카운터 성공하면 아래와같이 진행한다.
+			//AnimInstance->Montage_SetNextSection(TEXT("Start"), TEXT("Counter"));
+		}
 	}
 }
 
@@ -39,9 +57,16 @@ void UPawnAnimCombo::UpdateAnimMontage(UAnimInstance* AnimInstance)
 {
 	if (IsValid(m_ComboMontage))
 	{
-		m_ComboIndex++;
-		AnimInstance->Montage_SetNextSection(UPawnAnimCombo::GetComboStartName(m_ComboIndex - 1), UPawnAnimCombo::GetComboStartName(m_ComboIndex));
-		AnimInstance->Montage_SetNextSection(UPawnAnimCombo::GetComboStartName(m_ComboIndex), UPawnAnimCombo::GetComboEndeName(m_ComboIndex));
+		if (EComboType::Attack == m_ComboType)
+		{
+			m_ComboIndex++;
+			AnimInstance->Montage_SetNextSection(UPawnAnimCombo::GetComboStartName(m_ComboIndex - 1), UPawnAnimCombo::GetComboStartName(m_ComboIndex));
+			AnimInstance->Montage_SetNextSection(UPawnAnimCombo::GetComboStartName(m_ComboIndex), UPawnAnimCombo::GetComboEndeName(m_ComboIndex));
+		}
+		else if (EComboType::Defence == m_ComboType)
+		{
+			AnimInstance->Montage_SetNextSection(TEXT("Start"), TEXT("Counter"));
+		}
 	}
 }
 

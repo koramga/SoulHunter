@@ -91,5 +91,12 @@ enum class EPlayerCharacterType : uint8
 	Max,
 };
 
+UENUM(BlueprintType)
+enum class EComboType : uint8
+{
+	Attack,
+	Defence,
+};
+
 FName ConvertPlayerCharacterTypeToString(EPlayerCharacterType PlayerCharacterType);
 EPlayerCharacterType ConvertPlayerCharacterTypeToPlayerCharacterType(const FName& Name);

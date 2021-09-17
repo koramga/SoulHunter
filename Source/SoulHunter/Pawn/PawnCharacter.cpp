@@ -65,8 +65,6 @@ void APawnCharacter::Tick(float DeltaTime)
 
 	m_PawnAnimInstance->SetSpeed(m_Speed);
 	m_PawnAnimInstance->SetAngle(m_Angle);
-	m_PawnAnimInstance->SetAttackType(m_AttackType);
-	m_PawnAnimInstance->SetComboType(m_ComboType);
 }
 
 EPawnAnimType APawnCharacter::GetPawnAnimType() const
