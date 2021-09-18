@@ -30,6 +30,21 @@ protected :
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
 	class ANPCCharacter* m_NPCCharacter;
 
+protected :
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
+	FName		m_BBTraceRangeName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
+	FName		m_BBTargetPawnCharacterName;
+
+public :
+	void SetBlackboardTraceRange(float TraceRange);
+	void SetBlackboardTargetPawnCharacter(class APawnCharacter* PawnCharacter);
+
+public :
+	float GetBlackboardTraceRange() const;
+	class APawnCharacter* GetBlackboardTargetPawnCharacter() const;
+
 protected:
 	virtual void OnPossess(APawn* InPawn) override;
 	virtual void OnUnPossess() override;

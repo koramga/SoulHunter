@@ -47,4 +47,7 @@ public :
 	virtual void SetEndAnimationState(EPawnAnimType PawnCharacterAnimType);
 	virtual void ResetAnimationState(EPawnAnimType PawnCharacterAnimType);
 	virtual void SetAnimationStateEndCount(EPawnAnimType PawnCharacterAnimType, int32 Count);
+
+public :
+	virtual bool IsDeath();
 };

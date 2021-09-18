@@ -91,3 +91,8 @@ void APawnCharacter::SetAnimationStateEndCount(EPawnAnimType PawnCharacterAnimTy
 {
 	m_PawnAnimInstance->SetAnimationStateEndCount(PawnCharacterAnimType, Count);
 }
+
+bool APawnCharacter::IsDeath()
+{
+	return false;
+}

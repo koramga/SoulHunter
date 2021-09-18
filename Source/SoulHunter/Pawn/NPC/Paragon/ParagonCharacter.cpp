@@ -10,3 +10,13 @@ AParagonCharacter::AParagonCharacter()
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 	AIControllerClass = AParagonAIController::StaticClass();
 }
+
+void AParagonCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+}
+
+void AParagonCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+}
