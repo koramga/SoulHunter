@@ -13,4 +13,6 @@ class SOULHUNTER_API AParagonCharacter : public ANPCCharacter
 {
 	GENERATED_BODY()
 	
+public :
+	AParagonCharacter();
 };

@@ -3,3 +3,7 @@
 
 #include "NPCCharacter.h"
 
+ANPCCharacter::ANPCCharacter()
+{
+	m_NPCCharacterType = ENPCCharacterType::Max;
+}

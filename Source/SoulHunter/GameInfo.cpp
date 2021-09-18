@@ -156,3 +156,28 @@ ENPCCharacterType ConvertNameToNPCCharacterType(const FName& Name)
 
 	return ENPCCharacterType::Max;
 }
+FName ConvertNPCAIControllerTypeToName(ENPCAIControllerType NPCAIController)
+{
+	switch (NPCAIController)
+	{
+	case ENPCAIControllerType::Paragon:
+		return TEXT("Paragon");
+	}
+
+	return TEXT("Max");
+}
+
+ENPCAIControllerType ConvertNameToNPCAIControllerType(const FName& Name)
+{
+	for (int i = 0; i < static_cast<int>(ENPCCharacterType::Max); ++i)
+	{
+		ENPCAIControllerType Type = static_cast<ENPCAIControllerType>(i);
+
+		if (ConvertNPCAIControllerTypeToName(Type) == Name)
+		{
+			return Type;
+		}
+	}
+
+	return ENPCAIControllerType::Max;
+}

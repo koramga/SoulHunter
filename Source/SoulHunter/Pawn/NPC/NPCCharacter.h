@@ -11,6 +11,12 @@
 UCLASS()
 class SOULHUNTER_API ANPCCharacter : public APawnCharacter
 {
-	GENERATED_BODY()
-	
+	GENERATED_BODY()	
+
+public :
+	ANPCCharacter();
+
+protected :
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
+	ENPCCharacterType		m_NPCCharacterType;
 };

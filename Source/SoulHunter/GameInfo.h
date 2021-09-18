@@ -4,6 +4,11 @@
 
 #include "EngineMinimal.h"
 #include "Engine.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "BehaviorTree/BehaviorTree.h"
+#include "BehaviorTree/BlackboardData.h"
+#include "BehaviorTree/BlackboardComponent.h"
+#include "NavigationSystem/Public/NavigationPath.h"
 
 /**
  * 
@@ -122,6 +127,16 @@ enum class ENPCCharacterType : uint8
 
 FName ConvertNPCCharacterTypeToName(ENPCCharacterType NPCCharacterType);
 ENPCCharacterType ConvertNameToNPCCharacterType(const FName& Name);
+
+UENUM(BlueprintType)
+enum class ENPCAIControllerType : uint8
+{
+	Paragon,
+	Max,
+};
+
+FName ConvertNPCAIControllerTypeToName(ENPCAIControllerType NPCAIController);
+ENPCAIControllerType ConvertNameToNPCAIControllerType(const FName& Name);
 
 UENUM(BlueprintType)
 enum class EComboType : uint8
