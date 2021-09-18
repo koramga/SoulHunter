@@ -74,7 +74,7 @@ enum class EPlayerClassType : uint8
 	Max,
 };
 
-FName ConvertPlayerClassTypeToString(EPlayerClassType PlayerClassType);
+FName ConvertPlayerClassTypeToName(EPlayerClassType PlayerClassType);
 EPlayerClassType ConvertNameToPlayerClassType(const FName& Name);
 
 UENUM(BlueprintType)
@@ -99,12 +99,33 @@ enum class EPlayerCharacterType : uint8
 	Max,
 };
 
+FName ConvertPlayerCharacterTypeToName(EPlayerCharacterType PlayerCharacterType);
+EPlayerCharacterType ConvertNameToPlayerCharacterType(const FName& Name);
+
+UENUM(BlueprintType)
+enum class EPawnCharacterType : uint8
+{
+	Player,
+	NPC,
+	Max,
+};
+
+FName ConvertPawnCharacterTypeToName(EPawnCharacterType PawnCharacterType);
+EPawnCharacterType ConvertNameToPawnCharacterType(const FName& Name);
+
+UENUM(BlueprintType)
+enum class ENPCCharacterType : uint8
+{
+	Paragon,
+	Max,
+};
+
+FName ConvertNPCCharacterTypeToName(ENPCCharacterType NPCCharacterType);
+ENPCCharacterType ConvertNameToNPCCharacterType(const FName& Name);
+
 UENUM(BlueprintType)
 enum class EComboType : uint8
 {
 	Attack,
 	Defence,
 };
-
-FName ConvertPlayerCharacterTypeToString(EPlayerCharacterType PlayerCharacterType);
-EPlayerCharacterType ConvertPlayerCharacterTypeToPlayerCharacterType(const FName& Name);

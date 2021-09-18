@@ -2,7 +2,7 @@
 
 
 #include "UserPlayerController.h"
-#include "../../Pawn/Player/PlayerCharacter.h"
+#include "../PlayerCharacter.h"
 
 AUserPlayerController::AUserPlayerController()
 {

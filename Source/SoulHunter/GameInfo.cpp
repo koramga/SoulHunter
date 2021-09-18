@@ -2,7 +2,7 @@
 
 
 #include "GameInfo.h"
-#include "Controller/User/UserPlayerController.h"
+#include "Pawn/Player/Controller/UserPlayerController.h"
 #include "Pawn/PawnCharacter.h"
 
 DEFINE_LOG_CATEGORY(UE8)
@@ -44,7 +44,7 @@ void PlaySoundAtLocation(APawnCharacter* PawnCharacter, USoundBase* Sound)
 	return PlaySoundAtLocation(PawnCharacter->GetWorld(), Sound, PawnCharacter->GetActorLocation());
 }
 
-FName ConvertPlayerClassTypeToString(EPlayerClassType PlayerClassType)
+FName ConvertPlayerClassTypeToName(EPlayerClassType PlayerClassType)
 {
 	switch (PlayerClassType)
 	{
@@ -61,7 +61,7 @@ EPlayerClassType ConvertNameToPlayerClassType(const FName& Name)
 	{
 		EPlayerClassType Type = static_cast<EPlayerClassType>(i);
 
-		if (ConvertPlayerClassTypeToString(Type) == Name)
+		if (ConvertPlayerClassTypeToName(Type) == Name)
 		{
 			return Type;
 		}
@@ -70,7 +70,7 @@ EPlayerClassType ConvertNameToPlayerClassType(const FName& Name)
 	return EPlayerClassType::Max;
 }
 
-FName ConvertPlayerCharacterTypeToString(EPlayerCharacterType PlayerCharacterType)
+FName ConvertPlayerCharacterTypeToName(EPlayerCharacterType PlayerCharacterType)
 {
 	switch (PlayerCharacterType)
 	{
@@ -87,17 +87,72 @@ FName ConvertPlayerCharacterTypeToString(EPlayerCharacterType PlayerCharacterTyp
 	return TEXT("Max");
 }
 
-EPlayerCharacterType ConvertPlayerCharacterTypeToPlayerCharacterType(const FName& Name)
+EPlayerCharacterType ConvertNameToPlayerCharacterType(const FName& Name)
 {
 	for (int i = 0; i < static_cast<int>(EPlayerCharacterType::Max); ++i)
 	{
 		EPlayerCharacterType Type = static_cast<EPlayerCharacterType>(i);
 
-		if (ConvertPlayerCharacterTypeToString(Type) == Name)
+		if (ConvertPlayerCharacterTypeToName(Type) == Name)
 		{
 			return Type;
 		}
 	}
 
 	return EPlayerCharacterType::Max;
+}
+
+FName ConvertPawnCharacterTypeToName(EPawnCharacterType PawnCharacterType)
+{
+	switch (PawnCharacterType)
+	{
+	case EPawnCharacterType::Player :
+		return TEXT("Player");
+
+	case EPawnCharacterType::NPC :
+		return TEXT("NPC");
+	}
+
+	return TEXT("Max");
+}
+
+EPawnCharacterType ConvertNameToPawnCharacterType(const FName& Name)
+{
+	for (int i = 0; i < static_cast<int>(EPawnCharacterType::Max); ++i)
+	{
+		EPawnCharacterType Type = static_cast<EPawnCharacterType>(i);
+
+		if (ConvertPawnCharacterTypeToName(Type) == Name)
+		{
+			return Type;
+		}
+	}
+
+	return EPawnCharacterType::Max;
+}
+
+FName ConvertNPCCharacterTypeToName(ENPCCharacterType NPCCharacterType)
+{
+	switch (NPCCharacterType)
+	{
+	case ENPCCharacterType::Paragon:
+		return TEXT("Paragon");
+	}
+
+	return TEXT("Max");
+}
+
+ENPCCharacterType ConvertNameToNPCCharacterType(const FName& Name)
+{
+	for (int i = 0; i < static_cast<int>(ENPCCharacterType::Max); ++i)
+	{
+		ENPCCharacterType Type = static_cast<ENPCCharacterType>(i);
+
+		if (ConvertNPCCharacterTypeToName(Type) == Name)
+		{
+			return Type;
+		}
+	}
+
+	return ENPCCharacterType::Max;
 }

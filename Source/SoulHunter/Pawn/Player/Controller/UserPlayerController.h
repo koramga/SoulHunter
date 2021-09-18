@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "../../GameInfo.h"
+#include "../../../GameInfo.h"
 #include "GameFramework/PlayerController.h"
 #include "UserPlayerController.generated.h"
 
