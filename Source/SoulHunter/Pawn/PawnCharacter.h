@@ -47,6 +47,10 @@ public :
 	virtual void SetEndAnimationState(EPawnAnimType PawnCharacterAnimType);
 	virtual void ResetAnimationState(EPawnAnimType PawnCharacterAnimType);
 	virtual void SetAnimationStateEndCount(EPawnAnimType PawnCharacterAnimType, int32 Count);
+	EPawnAnimState GetAnimationState(EPawnAnimType PawnAnimType) const;
+	virtual void StartAnimationState(EPawnAnimType PawnAnimType);
+	virtual void StartAnimationState(EPawnAnimType PawnAnimType, EDirection Direction, ECombinationType CombinationType);
+	virtual void StartAnimationState(EPawnAnimType PawnAnimType, EDirection Direction, ECombinationType CombinationType, class APawnCharacter* TargetCharacter);
 
 public :
 	virtual bool IsDeath();

@@ -45,6 +45,14 @@ public :
 	float GetBlackboardTraceRange() const;
 	class APawnCharacter* GetBlackboardTargetPawnCharacter() const;
 
+public :
+	virtual void StartAnimationState(EPawnAnimType PawnAnimType);
+	virtual void StartAnimationState(EPawnAnimType PawnAnimType, EDirection Direction, ECombinationType CombinationType);
+	virtual void StartAnimationState(EPawnAnimType PawnAnimType, EDirection Direction, ECombinationType CombinationType, class APawnCharacter* TargetCharacter);
+	EPawnAnimState GetAnimationState(EPawnAnimType PawnAnimType) const;
+	virtual void EndAnimationState(EPawnAnimType PawnAnimType);
+	virtual void ResetAnimationState(EPawnAnimType PawnAnimType);
+
 protected:
 	virtual void OnPossess(APawn* InPawn) override;
 	virtual void OnUnPossess() override;

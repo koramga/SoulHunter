@@ -51,3 +51,34 @@ class APawnCharacter* ANPCAIController::GetBlackboardTargetPawnCharacter() const
 {
 	return Cast<APawnCharacter>(Blackboard->GetValueAsObject(m_BBTargetPawnCharacterName));
 }
+
+
+void ANPCAIController::StartAnimationState(EPawnAnimType PawnAnimType)
+{
+	m_NPCCharacter->StartAnimationState(PawnAnimType);
+}
+
+void ANPCAIController::StartAnimationState(EPawnAnimType PawnAnimType, EDirection Direction, ECombinationType CombinationType)
+{
+	m_NPCCharacter->StartAnimationState(PawnAnimType, Direction, CombinationType);
+}
+
+void ANPCAIController::StartAnimationState(EPawnAnimType PawnAnimType, EDirection Direction, ECombinationType CombinationType, class APawnCharacter* TargetCharacter)
+{
+	m_NPCCharacter->StartAnimationState(PawnAnimType, Direction, CombinationType, TargetCharacter);
+}
+
+EPawnAnimState ANPCAIController::GetAnimationState(EPawnAnimType PawnAnimType) const
+{
+	return m_NPCCharacter->GetAnimationState(PawnAnimType);
+}
+
+void ANPCAIController::EndAnimationState(EPawnAnimType PawnAnimType)
+{
+	m_NPCCharacter->SetEndAnimationState(PawnAnimType);
+}
+
+void ANPCAIController::ResetAnimationState(EPawnAnimType PawnAnimType)
+{
+	m_NPCCharacter->ResetAnimationState(PawnAnimType);
+}

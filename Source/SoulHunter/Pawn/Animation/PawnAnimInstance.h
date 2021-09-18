@@ -41,6 +41,9 @@ protected :
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
 	ECombinationType	m_CombinationType;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
+	class APawnCharacter* m_PawnCharacter;
+
 protected :
 	EDirection			m_InputDirection;
 	ECombinationType	m_InputCombinationType;
@@ -85,4 +88,8 @@ public :
 	virtual void SetEndAnimationState(EPawnAnimType PawnAnimType, EPawnAnimType NextPawnAnimType = EPawnAnimType::Idle);
 	virtual void ResetAnimationState(EPawnAnimType PawnAnimType);
 	virtual void SetAnimationStateEndCount(EPawnAnimType PawnAnimType, int32 Count);
+	EPawnAnimState GetAnimationState(EPawnAnimType PawnAnimType);
+	virtual void StartAnimationState(EPawnAnimType PawnAnimType);
+	virtual void StartAnimationState(EPawnAnimType PawnAnimType, EDirection Direction, ECombinationType CombinationType);
+	virtual void StartAnimationState(EPawnAnimType PawnAnimType, EDirection Direction, ECombinationType CombinationType, class APawnCharacter* TargetCharacter);
 };

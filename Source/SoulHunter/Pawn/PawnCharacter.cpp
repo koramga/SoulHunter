@@ -92,6 +92,26 @@ void APawnCharacter::SetAnimationStateEndCount(EPawnAnimType PawnCharacterAnimTy
 	m_PawnAnimInstance->SetAnimationStateEndCount(PawnCharacterAnimType, Count);
 }
 
+EPawnAnimState APawnCharacter::GetAnimationState(EPawnAnimType PawnAnimType) const
+{
+	return m_PawnAnimInstance->GetAnimationState(PawnAnimType);
+}
+
+void APawnCharacter::StartAnimationState(EPawnAnimType PawnAnimType)
+{
+	m_PawnAnimInstance->StartAnimationState(PawnAnimType);
+}
+
+void APawnCharacter::StartAnimationState(EPawnAnimType PawnAnimType, EDirection Direction, ECombinationType CombinationType)
+{
+	m_PawnAnimInstance->StartAnimationState(PawnAnimType, Direction, CombinationType);
+}
+
+void APawnCharacter::StartAnimationState(EPawnAnimType PawnAnimType, EDirection Direction, ECombinationType CombinationType, APawnCharacter* TargetCharacter)
+{
+	m_PawnAnimInstance->StartAnimationState(PawnAnimType, Direction, CombinationType, TargetCharacter);
+}
+
 bool APawnCharacter::IsDeath()
 {
 	return false;

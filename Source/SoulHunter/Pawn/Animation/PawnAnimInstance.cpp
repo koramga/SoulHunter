@@ -2,6 +2,7 @@
 
 
 #include "PawnAnimInstance.h"
+#include "../PawnCharacter.h"
 
 UPawnAnimInstance::UPawnAnimInstance()
 {
@@ -22,6 +23,8 @@ void UPawnAnimInstance::NativeInitializeAnimation()
 	{
 		m_PawnAnimState->CreateAnimationState(static_cast<EPawnAnimType>(i));
 	}
+
+	m_PawnCharacter = Cast<APawnCharacter>(TryGetPawnOwner());
 }
 
 void UPawnAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
@@ -207,6 +210,11 @@ void UPawnAnimInstance::SetEndAnimationState(EPawnAnimType PawnAnimType, EPawnAn
 	SetPawnAnimType(NextPawnAnimType, true);
 }
 
+EPawnAnimState UPawnAnimInstance::GetAnimationState(EPawnAnimType PawnAnimType)
+{
+	return m_PawnAnimState->GetAnimationState(PawnAnimType);
+}
+
 void UPawnAnimInstance::ResetAnimationState(EPawnAnimType PawnAnimType)
 {
 	m_PawnAnimState->ResetAnimationState(PawnAnimType);
@@ -215,4 +223,38 @@ void UPawnAnimInstance::ResetAnimationState(EPawnAnimType PawnAnimType)
 void UPawnAnimInstance::SetAnimationStateEndCount(EPawnAnimType PawnAnimType, int32 Count)
 {
 	m_PawnAnimState->SetAnimationStateEndCount(PawnAnimType, Count);
+}
+
+void UPawnAnimInstance::StartAnimationState(EPawnAnimType PawnAnimType)
+{
+	SetPawnAnimType(PawnAnimType);
+
+	m_PawnAnimState->SetStartAnimationState(PawnAnimType);
+}
+
+void UPawnAnimInstance::StartAnimationState(EPawnAnimType PawnAnimType, EDirection Direction, ECombinationType CombinationType)
+{
+	m_Direction = m_InputDirection = Direction;
+	m_CombinationType = m_InputCombinationType = CombinationType;
+
+	StartAnimationState(PawnAnimType);
+}
+
+void UPawnAnimInstance::StartAnimationState(EPawnAnimType PawnAnimType, EDirection Direction, ECombinationType CombinationType, APawnCharacter* TargetCharacter)
+{
+	StartAnimationState(PawnAnimType, Direction, CombinationType);
+
+	if (IsValid(TargetCharacter)
+		&& IsValid(m_PawnCharacter))
+	{
+		FVector ActorLocation = m_PawnCharacter->GetActorLocation();
+		FVector TargetLocation = TargetCharacter->GetActorLocation();
+
+		ActorLocation.Z = 0.f;
+		TargetLocation.Z = 0.f;
+
+		FRotator Rotator = UKismetMathLibrary::FindLookAtRotation(ActorLocation, TargetLocation);
+
+		m_PawnCharacter->SetActorRotation(Rotator.Quaternion());
+	}
 }
