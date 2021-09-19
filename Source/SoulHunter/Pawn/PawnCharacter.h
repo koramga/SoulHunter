@@ -31,6 +31,13 @@ protected :
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
 	int32 m_ComboType;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
+	APawnCharacter* m_LookAtPawnCharacter;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
+	bool					m_LookAtMode;
+
+	//int32
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -49,8 +56,8 @@ public :
 	virtual void SetAnimationStateEndCount(EPawnAnimType PawnCharacterAnimType, int32 Count);
 	EPawnAnimState GetAnimationState(EPawnAnimType PawnAnimType) const;
 	virtual void StartAnimationState(EPawnAnimType PawnAnimType);
-	virtual void StartAnimationState(EPawnAnimType PawnAnimType, EDirection Direction, ECombinationType CombinationType);
-	virtual void StartAnimationState(EPawnAnimType PawnAnimType, EDirection Direction, ECombinationType CombinationType, class APawnCharacter* TargetCharacter);
+	virtual void StartAnimationState(EPawnAnimType PawnAnimType, int32 Direction, ECombinationType CombinationType);
+	virtual void StartAnimationState(EPawnAnimType PawnAnimType, int32 Direction, ECombinationType CombinationType, class APawnCharacter* TargetCharacter);
 
 public :
 	virtual bool IsDeath();

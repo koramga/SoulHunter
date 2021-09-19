@@ -55,7 +55,7 @@ void UMannequinAnimInstance::UpdatePawnType(EPawnAnimType BeforePawnAnimType, EP
 	Super::UpdatePawnType(BeforePawnAnimType, AfterPawnAnimType);
 }
 
-void UMannequinAnimInstance::UpdateSpecialAnim(UPawnAnimCombo* PawnAnimCombo, EComboType ComboType, EDirection Direction, ECombinationType CombinationType)
+void UMannequinAnimInstance::UpdateSpecialAnim(UPawnAnimCombo* PawnAnimCombo, EComboType ComboType, int32 Direction, ECombinationType CombinationType)
 {
 	if (EComboType::Attack == ComboType)
 	{
@@ -64,21 +64,22 @@ void UMannequinAnimInstance::UpdateSpecialAnim(UPawnAnimCombo* PawnAnimCombo, EC
 			int Index = -1;
 			int ComboCount = 4;
 
-			switch (Direction)
+			if ((Direction & DIRECTION_FORWARD) > 0)
 			{
-			case EDirection::Left:
-				Index = 3;
-				break;
-			case EDirection::Right:
-				Index = 2;
-				break;
-			case EDirection::Forward:
 				ComboCount = 3;
 				Index = 0;
-				break;
-			case EDirection::Back:
-				Index = 1;
-				break;
+			}
+			else if ((Direction & DIRECTION_BACK) > 0)
+			{
+				Index = 1;				
+			}
+			else if ((Direction & DIRECTION_LEFT) > 0)
+			{
+				Index = 3;
+			}
+			else if ((Direction & DIRECTION_RIGHT) > 0)
+			{
+				Index = 2;
 			}
 
 			if (Index >= 0)

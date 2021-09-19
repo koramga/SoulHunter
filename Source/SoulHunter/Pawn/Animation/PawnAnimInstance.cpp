@@ -8,7 +8,7 @@ UPawnAnimInstance::UPawnAnimInstance()
 {
 	m_PawnAnimType = EPawnAnimType::Idle;
 
-	m_Direction = m_InputDirection = EDirection::Forward;
+	m_Direction = m_InputDirection = 0;
 	m_CombinationType = m_InputCombinationType = ECombinationType::None;
 }
 
@@ -75,7 +75,7 @@ void UPawnAnimInstance::UpdatePawnType(EPawnAnimType BeforePawnAnimType, EPawnAn
 
 }
 
-void UPawnAnimInstance::UpdateSpecialAnim(UPawnAnimCombo* PawnAnimCombo, EComboType ComboType, EDirection Direction, ECombinationType CombinationType)
+void UPawnAnimInstance::UpdateSpecialAnim(UPawnAnimCombo* PawnAnimCombo, EComboType ComboType, int32 Direction, ECombinationType CombinationType)
 {
 
 }
@@ -161,7 +161,7 @@ void UPawnAnimInstance::SetSpeed(float Speed)
 	m_Speed = Speed;
 }
 
-void UPawnAnimInstance::SetDirection(EDirection Direction)
+void UPawnAnimInstance::SetDirection(int32 Direction)
 {
 	m_InputDirection = Direction;
 }
@@ -186,7 +186,7 @@ float UPawnAnimInstance::GetSpeed() const
 	return m_Speed;
 }
 
-EDirection UPawnAnimInstance::GetDirection() const
+int32 UPawnAnimInstance::GetDirection() const
 {
 	return m_InputDirection;
 }
@@ -232,7 +232,7 @@ void UPawnAnimInstance::StartAnimationState(EPawnAnimType PawnAnimType)
 	m_PawnAnimState->SetStartAnimationState(PawnAnimType);
 }
 
-void UPawnAnimInstance::StartAnimationState(EPawnAnimType PawnAnimType, EDirection Direction, ECombinationType CombinationType)
+void UPawnAnimInstance::StartAnimationState(EPawnAnimType PawnAnimType, int32 Direction, ECombinationType CombinationType)
 {
 	m_Direction = m_InputDirection = Direction;
 	m_CombinationType = m_InputCombinationType = CombinationType;
@@ -240,7 +240,7 @@ void UPawnAnimInstance::StartAnimationState(EPawnAnimType PawnAnimType, EDirecti
 	StartAnimationState(PawnAnimType);
 }
 
-void UPawnAnimInstance::StartAnimationState(EPawnAnimType PawnAnimType, EDirection Direction, ECombinationType CombinationType, APawnCharacter* TargetCharacter)
+void UPawnAnimInstance::StartAnimationState(EPawnAnimType PawnAnimType, int32 Direction, ECombinationType CombinationType, APawnCharacter* TargetCharacter)
 {
 	StartAnimationState(PawnAnimType, Direction, CombinationType);
 

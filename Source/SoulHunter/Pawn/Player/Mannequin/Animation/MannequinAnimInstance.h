@@ -30,7 +30,7 @@ public:
 
 private :
 	virtual void UpdatePawnType(EPawnAnimType BeforePawnAnimType, EPawnAnimType AfterPawnAnimType) override;
-	virtual void UpdateSpecialAnim(UPawnAnimCombo* PawnAnimCombo, EComboType ComboType, EDirection Direction, ECombinationType CombinationType) override;
+	virtual void UpdateSpecialAnim(UPawnAnimCombo* PawnAnimCombo, EComboType ComboType, int32 Direction, ECombinationType CombinationType) override;
 
 protected :
 };

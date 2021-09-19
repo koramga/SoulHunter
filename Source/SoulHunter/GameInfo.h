@@ -25,6 +25,11 @@ void PrintViewport(float Duration, const FColor& Color, const FString& strText);
 void PlaySoundAtLocation(UWorld* World, USoundBase* Sound, const FVector& Location);
 void PlaySoundAtLocation(class APawnCharacter* PawnCharacter, USoundBase* Sound);
 
+#define DIRECTION_FORWARD	0x01
+#define DIRECTION_BACK		0x02
+#define DIRECTION_LEFT		0x04
+#define DIRECTION_RIGHT		0x08
+
 UENUM(BlueprintType)
 enum class EPawnAnimType : uint8
 {
@@ -49,13 +54,14 @@ enum class EPawnAnimState : uint8
 	Max,
 };
 
-UENUM(BlueprintType)
+UENUM(BlueprintType, Meta = (Bitflags))
 enum class EDirection : uint8
 {
-	Left,
-	Right,
-	Forward,
-	Back,
+	None,
+	Forward = DIRECTION_FORWARD,
+	Back = DIRECTION_BACK,
+	Left = DIRECTION_LEFT,
+	Right = DIRECTION_RIGHT,
 };
 
 UENUM(BlueprintType)

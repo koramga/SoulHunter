@@ -53,9 +53,25 @@ void AUserPlayerController::PlayerTick(float DeltaTime)
 			//
 			//PrintViewport(1.f, FColor::Red, *FString::Printf(TEXT("Yaw : %.2f"), fYaw));
 
-			if (EPawnAnimType::Attack != m_PlayerCharacter->GetPawnAnimType())
+			if (EPawnAnimType::Attack != m_PlayerCharacter->GetPawnAnimType()
+				&& false == m_PlayerCharacter->IsLookAtMode())
 			{
-				AddYawInput(fDeltaX);
+				//AddYawInput(fDeltaX);
+
+				//FRotator Rotator = m_PlayerCharacter->GetActorRotation();
+				//
+				//Rotator.Yaw += fDeltaX * 10.f;
+				//
+				//m_PlayerCharacter->SetActorRotation(Rotator.Quaternion());
+
+				FRotator Rotator = m_PlayerCharacter->GetActorRotation();
+
+				Rotator.Yaw += fDeltaX;
+
+				m_PlayerCharacter->SetActorRotation(Rotator);
+			}
+			else
+			{
 			}
 		}
 
@@ -65,6 +81,10 @@ void AUserPlayerController::PlayerTick(float DeltaTime)
 			//AddPitchInput(fDeltaY);
 		}
 	}
+
+	//FRotator Rotator = m_PlayerCharacter->GetActorRotation();
+	//
+	//LOG(TEXT("%.2f, %.2f"), Rotator.Yaw, InputYawScale);
 
 	UpdateRotation(DeltaTime);
 

@@ -58,12 +58,12 @@ void ANPCAIController::StartAnimationState(EPawnAnimType PawnAnimType)
 	m_NPCCharacter->StartAnimationState(PawnAnimType);
 }
 
-void ANPCAIController::StartAnimationState(EPawnAnimType PawnAnimType, EDirection Direction, ECombinationType CombinationType)
+void ANPCAIController::StartAnimationState(EPawnAnimType PawnAnimType, int32 Direction, ECombinationType CombinationType)
 {
 	m_NPCCharacter->StartAnimationState(PawnAnimType, Direction, CombinationType);
 }
 
-void ANPCAIController::StartAnimationState(EPawnAnimType PawnAnimType, EDirection Direction, ECombinationType CombinationType, class APawnCharacter* TargetCharacter)
+void ANPCAIController::StartAnimationState(EPawnAnimType PawnAnimType, int32 Direction, ECombinationType CombinationType, class APawnCharacter* TargetCharacter)
 {
 	m_NPCCharacter->StartAnimationState(PawnAnimType, Direction, CombinationType, TargetCharacter);
 }

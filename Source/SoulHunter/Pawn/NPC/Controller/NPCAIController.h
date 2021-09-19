@@ -47,8 +47,8 @@ public :
 
 public :
 	virtual void StartAnimationState(EPawnAnimType PawnAnimType);
-	virtual void StartAnimationState(EPawnAnimType PawnAnimType, EDirection Direction, ECombinationType CombinationType);
-	virtual void StartAnimationState(EPawnAnimType PawnAnimType, EDirection Direction, ECombinationType CombinationType, class APawnCharacter* TargetCharacter);
+	virtual void StartAnimationState(EPawnAnimType PawnAnimType, int32 Direction, ECombinationType CombinationType);
+	virtual void StartAnimationState(EPawnAnimType PawnAnimType, int32 Direction, ECombinationType CombinationType, class APawnCharacter* TargetCharacter);
 	EPawnAnimState GetAnimationState(EPawnAnimType PawnAnimType) const;
 	virtual void EndAnimationState(EPawnAnimType PawnAnimType);
 	virtual void ResetAnimationState(EPawnAnimType PawnAnimType);

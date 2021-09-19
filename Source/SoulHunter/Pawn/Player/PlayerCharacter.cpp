@@ -22,7 +22,7 @@ APlayerCharacter::APlayerCharacter()
 
 	m_PlayerCharacterType = EPlayerCharacterType::Max;
 
-	//
+	bUseControllerRotationYaw = false;
 
 	//Camera를 Arm에 붙여준다.
 	m_Camera->SetupAttachment(m_Arm);
@@ -38,29 +38,132 @@ void APlayerCharacter::BeginPlay()
 
 	SetPlayerClassType(EPlayerClassType::HeavyLancer);
 
+	m_ToggleWalkAndRun = EToggleWalkAndRun::Run;
 	//m_PlayerAnimInstance->SetPlayerClassType(EPlayerClassType::Lance);
 
-	GetCharacterMovement()->MaxWalkSpeed = m_PlayerVR->GetPlayerCharacterTableRow()->WalkSpeed;
+	GetCharacterMovement()->MaxWalkSpeed = m_PlayerVR->GetPlayerCharacterTableRow()->RunSpeed;
 
-	m_DilationToggle = false;
+	m_DilationToggle = true;
+
 }
 
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	EPawnAnimType PawnAnimType = m_PlayerAnimInstance->GetPawnAnimType();
+	//LOG(TEXT("Forward<1> : <%.2f, %.2f, %.2f>"), GetActorForwardVector().X, GetActorForwardVector().Y, GetActorForwardVector().Z);
 
-	if (m_Speed == 0.f)
+//	EPawnAnimType PawnAnimType = m_PlayerAnimInstance->GetPawnAnimType();
+//
+//	if (m_Speed == 0.f)
+//	{
+//		if (EPawnAnimType::Walk == PawnAnimType
+//			|| EPawnAnimType::Run == PawnAnimType)
+//		{
+//			m_PlayerAnimInstance->SetPawnAnimType(EPawnAnimType::Idle);
+//		}
+//	}
+//
+	if (false == m_LookAtMode)
 	{
-		if (EPawnAnimType::Walk == PawnAnimType
-			|| EPawnAnimType::Run == PawnAnimType)
+		FVector ActorLocation = GetActorLocation();
+		FVector StartLocation{ ActorLocation.X, ActorLocation.Y, ActorLocation.Z };    // Raytrace starting point.
+		FVector EndLocation = ActorLocation + GetActorForwardVector() * 2000.f;
+
+		FCollisionQueryParams param;
+
+		param.AddIgnoredActor(this);
+
+		// Raytrace for overlapping actors.
+		TArray<FHitResult> HitResults;
+		GetWorld()->LineTraceMultiByObjectType(
+			OUT HitResults,
+			StartLocation,
+			EndLocation,
+			FCollisionObjectQueryParams(ECollisionChannel::ECC_Pawn),
+			param
+		);
+
+		m_LookAtPawnCharacter = nullptr;
+
+		float MinimumDistance = FLT_MAX;
+
+		for (FHitResult HitResult : HitResults)
 		{
-			m_PlayerAnimInstance->SetPawnAnimType(EPawnAnimType::Idle);
+			APawnCharacter* PawnCharacter = Cast<APawnCharacter>(HitResult.Actor);
+
+			if (IsValid(PawnCharacter))
+			{
+				float Distance = FVector::Distance(ActorLocation, PawnCharacter->GetActorLocation());
+
+				if (MinimumDistance > Distance)
+				{
+					MinimumDistance = Distance;
+					m_LookAtPawnCharacter = PawnCharacter;
+				}
+			}
 		}
+
+#if ENABLE_DRAW_DEBUG
+
+		// Draw debug line.
+		FColor LineColor;
+
+		if (IsValid(m_LookAtPawnCharacter)) LineColor = FColor::Red;
+		else LineColor = FColor::Green;
+
+		DrawDebugLine(
+			GetWorld(),
+			StartLocation,
+			EndLocation,
+			LineColor,
+			false,
+			1.f,
+			0.f,
+			10.f
+		);
+
+#endif
+	}
+	else
+	{
+		do
+		{
+			if (false == IsValid(m_LookAtPawnCharacter)
+				|| m_LookAtPawnCharacter->IsDeath())
+			{
+				m_LookAtPawnCharacter = nullptr;
+				m_LookAtMode = false;
+				break;
+			}
+	
+			//FVector ActorLocation = GetActorLocation();
+			//
+			//FRotator Rotator = UKismetMathLibrary::FindLookAtRotation(ActorLocation, m_LookAtPawnCharacter->GetActorLocation());
+			//
+			//SetActorRotation(Rotator.Quaternion());
+	
+		} while (0);
 	}
 
-	//UpdateMoveAnimation();
+	//FVector ForwardVector = GetActorForwardVector();
+
+	//LOG(TEXT("Forward<3> : <%.2f, %.2f, %.2f>"), GetActorForwardVector().X, GetActorForwardVector().Y, GetActorForwardVector().Z);
+
+	//AUserPlayerController* UserPlayerController = GetController<AUserPlayerController>();
+	//
+	//float fDeltaX, fDeltaY;
+	//
+	//UserPlayerController->GetInputMouseDelta(fDeltaX, fDeltaY); 
+	//
+	//LOG(TEXT("DeltaX : <%.2f>"), fDeltaX * 10.f);
+	//
+	//FRotator Rotator = GetActorRotation();
+	//Rotator.Yaw += fDeltaX;
+	//
+	//SetActorRotation(Rotator);
+
+	UpdateMoveAnimation();
 }
 
 // Called to bind functionality to input
@@ -90,6 +193,9 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 	PlayerInputComponent->BindAction(TEXT("RollKey"), EInputEvent::IE_Pressed,
 		this, &APlayerCharacter::__InputRollKey);
+
+	PlayerInputComponent->BindAction(TEXT("LookAtKey"), EInputEvent::IE_Pressed,
+		this, &APlayerCharacter::__InputLookAtKey);
 
 	//PlayerInputComponent->BindAction(TEXT("AttackKey"), EInputEvent::IE_Pressed,
 	//	this, &APlayerCharacter::__InputAttackKey);
@@ -189,28 +295,11 @@ void APlayerCharacter::__InputDirectionTypeKey(float Scale)
 {
 	if (Scale > 0)
 	{
-		int32 Value = static_cast<int32>(Scale);
+		int32 DirectionOffset = static_cast<int32>(Scale);
 
-		if ((Value & 0x01) > 0)
-		{
-			//Forward
-			m_PlayerAnimInstance->SetDirection(EDirection::Forward);
-		}
-		else if ((Value & 0x02) > 0)
-		{
-			//Back
-			m_PlayerAnimInstance->SetDirection(EDirection::Back);
-		}
-		else if ((Value & 0x04) > 0)
-		{
-			//Left
-			m_PlayerAnimInstance->SetDirection(EDirection::Left);
-		}
-		else if ((Value & 0x08) > 0)
-		{
-			//Right
-			m_PlayerAnimInstance->SetDirection(EDirection::Right);
-		}
+		//PrintViewport(1.f, FColor::Red, FString::Printf(TEXT("Input : %d"), Value));
+
+		m_PlayerAnimInstance->SetDirection(DirectionOffset);
 	}
 }
 
@@ -243,16 +332,28 @@ void APlayerCharacter::__InputToggleWalkAndRun()
 
 void APlayerCharacter::__InputToggleKey()
 {
-	m_DilationToggle = !m_DilationToggle;
+	LOG(TEXT("Rotator Changed.."));
 
-	if (m_DilationToggle)
-	{
-		GetWorldSettings()->SetTimeDilation(1.f);
-	}
-	else
-	{
-		GetWorldSettings()->SetTimeDilation(0.5f);
-	}
+	static float Yaw = 30.f;
+
+	FRotator Rotator = GetActorRotation();
+
+	Rotator.Yaw += Yaw;
+
+	SetActorRotation(Rotator);
+
+	//m_DilationToggle = !m_DilationToggle;
+	//
+	//if (m_DilationToggle)
+	//{
+	//	GetWorldSettings()->SetTimeDilation(1.f);
+	//}
+	//else
+	//{
+	//	GetWorldSettings()->SetTimeDilation(0.5f);
+	//}
+
+
 }
 
 void APlayerCharacter::__InputDefenceKey()
@@ -277,6 +378,25 @@ void APlayerCharacter::__InputAvoidKey()
 void APlayerCharacter::__InputRollKey()
 {
 	m_PlayerAnimInstance->SetPawnAnimType(EPawnAnimType::Roll);
+}
+
+void APlayerCharacter::__InputLookAtKey()
+{
+	if (true == m_LookAtMode)
+	{
+		PrintViewport(1.f, FColor::Red, TEXT("LookAtMode OFF"));
+
+		m_LookAtMode = false;
+	}
+	else
+	{
+		if (IsValid(m_LookAtPawnCharacter))
+		{
+			PrintViewport(1.f, FColor::Red, FString::Printf(TEXT("LookAtMode ON <%s>"), *m_LookAtPawnCharacter->GetName()));
+
+			m_LookAtMode = true;
+		}
+	}
 }
 
 void APlayerCharacter::AddArmPitch(float Value)
@@ -338,4 +458,9 @@ void APlayerCharacter::SetPlayerClassType(EPlayerClassType PlayerClassType)
 			m_RHandMeshComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, RSocketName);
 		}
 	}
+}
+
+bool APlayerCharacter::IsLookAtMode() const
+{
+	return m_LookAtMode;
 }

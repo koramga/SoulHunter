@@ -67,14 +67,12 @@ private :
 	void __InputAttackKey();
 	void __InputAvoidKey();
 	void __InputRollKey();
-	void __InputForwardAvoidKey();
-	void __InputBackAvoidKey();
-	void __InputLeftAvoidKey();
-	void __InputRightAvoidKey();
+	void __InputLookAtKey();
 
 public :
 	void AddArmPitch(float Value);
 	void SetPlayerClassType(EPlayerClassType PlayerClassType);
+	bool IsLookAtMode() const;
 
 public :
 	virtual bool CanMove();

@@ -35,8 +35,9 @@ protected :
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
 	UPawnAnimCombo*		m_PawnAnimCombo;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
-	EDirection			m_Direction;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (Bitmask, BitmaskEnum = "EDirection", AllowPrivateAccess = "true"));
+	int32			m_Direction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
 	ECombinationType	m_CombinationType;
@@ -45,7 +46,7 @@ protected :
 	class APawnCharacter* m_PawnCharacter;
 
 protected :
-	EDirection			m_InputDirection;
+	int32			m_InputDirection;
 	ECombinationType	m_InputCombinationType;
 
 public:
@@ -67,20 +68,20 @@ private :
 
 protected :
 	virtual void UpdatePawnType(EPawnAnimType BeforePawnAnimType, EPawnAnimType AfterPawnAnimType);
-	virtual void UpdateSpecialAnim(UPawnAnimCombo* PawnAnimCombo, EComboType ComboType, EDirection Direction, ECombinationType CombinationType);
+	virtual void UpdateSpecialAnim(UPawnAnimCombo* PawnAnimCombo, EComboType ComboType, int32 Direction, ECombinationType CombinationType);
 
 public :
 	virtual void SetPawnAnimType(EPawnAnimType PawnAnimType, bool EndAnimationStateOffset = false);
 	void SetAngle(float Angle);
 	void SetSpeed(float Speed);
-	void SetDirection(EDirection Direction);
+	void SetDirection(int32 Direction);
 	void SetCombinationType(ECombinationType CombinationType);
 
 public :
 	virtual EPawnAnimType GetPawnAnimType() const;
 	float GetAngle() const;
 	float GetSpeed() const;
-	EDirection GetDirection() const;
+	int32 GetDirection() const;
 	ECombinationType GetCombinationType() const;
 
 public :
@@ -90,6 +91,6 @@ public :
 	virtual void SetAnimationStateEndCount(EPawnAnimType PawnAnimType, int32 Count);
 	EPawnAnimState GetAnimationState(EPawnAnimType PawnAnimType);
 	virtual void StartAnimationState(EPawnAnimType PawnAnimType);
-	virtual void StartAnimationState(EPawnAnimType PawnAnimType, EDirection Direction, ECombinationType CombinationType);
-	virtual void StartAnimationState(EPawnAnimType PawnAnimType, EDirection Direction, ECombinationType CombinationType, class APawnCharacter* TargetCharacter);
+	virtual void StartAnimationState(EPawnAnimType PawnAnimType, int32 Direction, ECombinationType CombinationType);
+	virtual void StartAnimationState(EPawnAnimType PawnAnimType, int32 Direction, ECombinationType CombinationType, class APawnCharacter* TargetCharacter);
 };
