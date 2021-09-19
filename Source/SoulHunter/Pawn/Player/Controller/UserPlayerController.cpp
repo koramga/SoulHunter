@@ -54,7 +54,7 @@ void AUserPlayerController::PlayerTick(float DeltaTime)
 			//PrintViewport(1.f, FColor::Red, *FString::Printf(TEXT("Yaw : %.2f"), fYaw));
 
 			if (EPawnAnimType::Attack != m_PlayerCharacter->GetPawnAnimType()
-				&& false == m_PlayerCharacter->IsLookAtMode())
+				&& false == m_PlayerCharacter->IsLockOn())
 			{
 				//AddYawInput(fDeltaX);
 

@@ -18,7 +18,7 @@ void APawnCharacter::BeginPlay()
 
 	m_PawnAnimInstance = Cast<UPawnAnimInstance>(GetMesh()->GetAnimInstance());
 
-	m_LookAtMode = false;
+	m_LockOn = false;
 }
 
 // Called every frame
@@ -37,9 +37,9 @@ void APawnCharacter::Tick(float DeltaTime)
 	{
 		//https://amored8701.tistory.com/132
 
-		if (m_LookAtMode)
+		if (m_LockOn)
 		{
-			FRotator Rotator = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), m_LookAtPawnCharacter->GetActorLocation());
+			FRotator Rotator = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), m_LockOnPawnCharacter->GetActorLocation());
 
 			LOG(TEXT("Rotator : <%.2f, %.2f, %.2f>"), Rotator.Pitch, Rotator.Yaw, Rotator.Roll);
 
@@ -128,4 +128,9 @@ void APawnCharacter::StartAnimationState(EPawnAnimType PawnAnimType, int32 Direc
 bool APawnCharacter::IsDeath()
 {
 	return false;
+}
+
+bool APawnCharacter::IsLockOn() const
+{
+	return m_LockOn;
 }

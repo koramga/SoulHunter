@@ -32,10 +32,10 @@ protected :
 	int32 m_ComboType;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
-	APawnCharacter* m_LookAtPawnCharacter;
+	APawnCharacter*			m_LockOnPawnCharacter;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
-	bool					m_LookAtMode;
+	bool					m_LockOn;
 
 	//int32
 protected:
@@ -61,4 +61,5 @@ public :
 
 public :
 	virtual bool IsDeath();
+	virtual bool IsLockOn() const;
 };

@@ -11,12 +11,6 @@ APlayerCharacter::APlayerCharacter()
 	m_Arm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Arm"));
 	m_Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 
-	m_LHandMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("LHandComponent"));
-	m_RHandMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("RHandComponent"));
-
-	m_LHandMeshComponent->SetupAttachment(GetMesh());
-	m_RHandMeshComponent->SetupAttachment(GetMesh());
-
 	//Arm을 Root에 붙여준다.
 	m_Arm->SetupAttachment(RootComponent);
 
@@ -64,7 +58,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 //		}
 //	}
 //
-	if (false == m_LookAtMode)
+	if (false == m_LockOn)
 	{
 		FVector ActorLocation = GetActorLocation();
 		FVector StartLocation{ ActorLocation.X, ActorLocation.Y, ActorLocation.Z };    // Raytrace starting point.
@@ -84,7 +78,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 			param
 		);
 
-		m_LookAtPawnCharacter = nullptr;
+		m_LockOnPawnCharacter = nullptr;
 
 		float MinimumDistance = FLT_MAX;
 
@@ -99,7 +93,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 				if (MinimumDistance > Distance)
 				{
 					MinimumDistance = Distance;
-					m_LookAtPawnCharacter = PawnCharacter;
+					m_LockOnPawnCharacter = PawnCharacter;
 				}
 			}
 		}
@@ -109,7 +103,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 		// Draw debug line.
 		FColor LineColor;
 
-		if (IsValid(m_LookAtPawnCharacter)) LineColor = FColor::Red;
+		if (IsValid(m_LockOnPawnCharacter)) LineColor = FColor::Red;
 		else LineColor = FColor::Green;
 
 		DrawDebugLine(
@@ -127,41 +121,13 @@ void APlayerCharacter::Tick(float DeltaTime)
 	}
 	else
 	{
-		do
+		if (false == IsValid(m_LockOnPawnCharacter)
+			|| m_LockOnPawnCharacter->IsDeath())
 		{
-			if (false == IsValid(m_LookAtPawnCharacter)
-				|| m_LookAtPawnCharacter->IsDeath())
-			{
-				m_LookAtPawnCharacter = nullptr;
-				m_LookAtMode = false;
-				break;
-			}
-	
-			//FVector ActorLocation = GetActorLocation();
-			//
-			//FRotator Rotator = UKismetMathLibrary::FindLookAtRotation(ActorLocation, m_LookAtPawnCharacter->GetActorLocation());
-			//
-			//SetActorRotation(Rotator.Quaternion());
-	
-		} while (0);
+			m_LockOnPawnCharacter = nullptr;
+			m_LockOn = false;
+		}
 	}
-
-	//FVector ForwardVector = GetActorForwardVector();
-
-	//LOG(TEXT("Forward<3> : <%.2f, %.2f, %.2f>"), GetActorForwardVector().X, GetActorForwardVector().Y, GetActorForwardVector().Z);
-
-	//AUserPlayerController* UserPlayerController = GetController<AUserPlayerController>();
-	//
-	//float fDeltaX, fDeltaY;
-	//
-	//UserPlayerController->GetInputMouseDelta(fDeltaX, fDeltaY); 
-	//
-	//LOG(TEXT("DeltaX : <%.2f>"), fDeltaX * 10.f);
-	//
-	//FRotator Rotator = GetActorRotation();
-	//Rotator.Yaw += fDeltaX;
-	//
-	//SetActorRotation(Rotator);
 
 	UpdateMoveAnimation();
 }
@@ -194,8 +160,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction(TEXT("RollKey"), EInputEvent::IE_Pressed,
 		this, &APlayerCharacter::__InputRollKey);
 
-	PlayerInputComponent->BindAction(TEXT("LookAtKey"), EInputEvent::IE_Pressed,
-		this, &APlayerCharacter::__InputLookAtKey);
+	PlayerInputComponent->BindAction(TEXT("LockOnKey"), EInputEvent::IE_Pressed,
+		this, &APlayerCharacter::__InputLockOnKey);
 
 	//PlayerInputComponent->BindAction(TEXT("AttackKey"), EInputEvent::IE_Pressed,
 	//	this, &APlayerCharacter::__InputAttackKey);
@@ -380,21 +346,21 @@ void APlayerCharacter::__InputRollKey()
 	m_PlayerAnimInstance->SetPawnAnimType(EPawnAnimType::Roll);
 }
 
-void APlayerCharacter::__InputLookAtKey()
+void APlayerCharacter::__InputLockOnKey()
 {
-	if (true == m_LookAtMode)
+	if (true == m_LockOn)
 	{
-		PrintViewport(1.f, FColor::Red, TEXT("LookAtMode OFF"));
+		PrintViewport(1.f, FColor::Red, TEXT("Lock Off"));
 
-		m_LookAtMode = false;
+		m_LockOn = false;
 	}
 	else
 	{
-		if (IsValid(m_LookAtPawnCharacter))
+		if (IsValid(m_LockOnPawnCharacter))
 		{
-			PrintViewport(1.f, FColor::Red, FString::Printf(TEXT("LookAtMode ON <%s>"), *m_LookAtPawnCharacter->GetName()));
+			PrintViewport(1.f, FColor::Red, FString::Printf(TEXT("Lock On <%s>"), *m_LockOnPawnCharacter->GetName()));
 
-			m_LookAtMode = true;
+			m_LockOn = true;
 		}
 	}
 }
@@ -431,36 +397,46 @@ void APlayerCharacter::SetPlayerClassType(EPlayerClassType PlayerClassType)
 
 			m_PlayerAnimInstance->SetPlayerClassType(PlayerClassType);
 
+			ABaseActor* LSocketActor = nullptr;
+			ABaseActor* RSocketActor = nullptr;
+
 			switch (PlayerClassType)
 			{
 			case EPlayerClassType::HeavyLancer:
 				LSocketName = L"HeavyLancerWeaponSocket";
-				LMeshPath = TEXT("StaticMesh'/Game/Heavy_Lancer_Set/mesh/SM_lance.SM_lance'");
+				LSocketActor = BASEGAMEINSTANCE->GetActorManager()->CreateActor(TEXT("Lance"), this);
 				RSocketName = L"HeavyLancerShieldSocket";
-				RMeshPath = TEXT("StaticMesh'/Game/Weapon_Pack/Mesh/Weapons/Weapons_Kit/SM_Shield.SM_Shield'");
+				RSocketActor = BASEGAMEINSTANCE->GetActorManager()->CreateActor(TEXT("Shield"), this);
 				break;
 			}
 
-			UStaticMesh* LMesh = LoadObject<UStaticMesh>(nullptr, *LMeshPath);
-			UStaticMesh* RMesh = LoadObject<UStaticMesh>(nullptr, *RMeshPath);
+			//UStaticMesh* LMesh = LoadObject<UStaticMesh>(nullptr, *LMeshPath);
+			//UStaticMesh* RMesh = LoadObject<UStaticMesh>(nullptr, *RMeshPath);
+			//
+			//if (IsValid(LMesh))
+			//{
+			//	m_LHandMeshComponent->SetStaticMesh(LMesh);
+			//}
+			//
+			//if (IsValid(RMesh))
+			//{
+			//	m_RHandMeshComponent->SetStaticMesh(RMesh);
+			//}
 
-			if (IsValid(LMesh))
+			if (IsValid(LSocketActor)
+				&& false == LSocketName.IsNone())
 			{
-				m_LHandMeshComponent->SetStaticMesh(LMesh);
+				LSocketActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, LSocketName);
 			}
 
-			if (IsValid(RMesh))
+			if (IsValid(RSocketActor)
+				&& false == RSocketName.IsNone())
 			{
-				m_RHandMeshComponent->SetStaticMesh(RMesh);
+				RSocketActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, RSocketName);
 			}
 
-			bool Attach = m_LHandMeshComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, LSocketName);
-			m_RHandMeshComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, RSocketName);
+			//bool Attach = m_LHandMeshComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, LSocketName);
+			//m_RHandMeshComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, RSocketName);
 		}
 	}
-}
-
-bool APlayerCharacter::IsLookAtMode() const
-{
-	return m_LookAtMode;
 }

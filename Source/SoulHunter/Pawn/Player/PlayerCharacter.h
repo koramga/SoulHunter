@@ -25,12 +25,6 @@ protected :
 	USpringArmComponent* m_Arm;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
-	UStaticMeshComponent* m_LHandMeshComponent;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
-	UStaticMeshComponent* m_RHandMeshComponent;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
 	class UPlayerAnimInstance* m_PlayerAnimInstance;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
@@ -67,12 +61,11 @@ private :
 	void __InputAttackKey();
 	void __InputAvoidKey();
 	void __InputRollKey();
-	void __InputLookAtKey();
+	void __InputLockOnKey();
 
 public :
 	void AddArmPitch(float Value);
 	void SetPlayerClassType(EPlayerClassType PlayerClassType);
-	bool IsLookAtMode() const;
 
 public :
 	virtual bool CanMove();

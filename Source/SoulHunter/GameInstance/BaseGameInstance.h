@@ -5,6 +5,7 @@
 #include "../GameInfo.h"
 #include "Engine/GameInstance.h"
 #include "../DataTable/DataTableManager.h"
+#include "../Actor/ActorManager.h"
 #include "BaseGameInstance.generated.h"
 
 /**
@@ -19,11 +20,14 @@ public :
 	UBaseGameInstance();
 
 protected :
-	UDataTableManager* m_DataTableManager;
+	UDataTableManager*	m_DataTableManager;
+	UActorManager*		m_ActorManager;
+
 
 public :
 	virtual void Init() override;
 
 public :
 	const UDataTableManager* GetDataTableManager() const;
+	const UActorManager* GetActorManager() const;
 };

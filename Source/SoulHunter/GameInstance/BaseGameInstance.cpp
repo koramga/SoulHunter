@@ -18,9 +18,21 @@ void UBaseGameInstance::Init()
 	{
 		m_DataTableManager->Init();
 	}
+
+	m_ActorManager = NewObject<UActorManager>(this, UActorManager::StaticClass());
+
+	if (IsValid(m_ActorManager))
+	{
+		m_ActorManager->Init();
+	}
 }
 
 const UDataTableManager* UBaseGameInstance::GetDataTableManager() const
 {
 	return m_DataTableManager;
+}
+
+const UActorManager* UBaseGameInstance::GetActorManager() const
+{
+	return m_ActorManager;
 }
