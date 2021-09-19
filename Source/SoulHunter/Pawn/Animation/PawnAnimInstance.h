@@ -66,6 +66,24 @@ private :
 	UFUNCTION()
 	void AnimNotify_DisableCounter();
 
+	UFUNCTION()
+	void AnimNotify_AttackStart();
+
+	UFUNCTION()
+	void AnimNotify_AttackEnd();
+
+	UFUNCTION()
+	void AnimNotify_CastStart();
+
+	UFUNCTION()
+	void AnimNotify_CastEnd();
+
+	UFUNCTION()
+	void AnimNotify_DefenceStart();
+
+	UFUNCTION()
+	void AnimNotify_DefenceEnd();
+
 protected :
 	virtual void UpdatePawnType(EPawnAnimType BeforePawnAnimType, EPawnAnimType AfterPawnAnimType);
 	virtual void UpdateSpecialAnim(UPawnAnimCombo* PawnAnimCombo, EComboType ComboType, int32 Direction, ECombinationType CombinationType);
@@ -76,6 +94,7 @@ public :
 	void SetSpeed(float Speed);
 	void SetDirection(int32 Direction);
 	void SetCombinationType(ECombinationType CombinationType);
+	void SetEnableCounter(bool EnableCounter);
 
 public :
 	virtual EPawnAnimType GetPawnAnimType() const;

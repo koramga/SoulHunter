@@ -38,7 +38,8 @@ void APlayerCharacter::BeginPlay()
 	GetCharacterMovement()->MaxWalkSpeed = m_PlayerVR->GetPlayerCharacterTableRow()->RunSpeed;
 
 	m_DilationToggle = true;
-
+	m_DefenceOn = false;
+	m_DilationTime = 0.f;
 }
 
 void APlayerCharacter::Tick(float DeltaTime)
@@ -98,26 +99,26 @@ void APlayerCharacter::Tick(float DeltaTime)
 			}
 		}
 
-#if ENABLE_DRAW_DEBUG
-
-		// Draw debug line.
-		FColor LineColor;
-
-		if (IsValid(m_LockOnPawnCharacter)) LineColor = FColor::Red;
-		else LineColor = FColor::Green;
-
-		DrawDebugLine(
-			GetWorld(),
-			StartLocation,
-			EndLocation,
-			LineColor,
-			false,
-			1.f,
-			0.f,
-			10.f
-		);
-
-#endif
+//#if ENABLE_DRAW_DEBUG
+//
+//		// Draw debug line.
+//		FColor LineColor;
+//
+//		if (IsValid(m_LockOnPawnCharacter)) LineColor = FColor::Red;
+//		else LineColor = FColor::Green;
+//
+//		DrawDebugLine(
+//			GetWorld(),
+//			StartLocation,
+//			EndLocation,
+//			LineColor,
+//			false,
+//			1.f,
+//			0.f,
+//			10.f
+//		);
+//
+//#endif
 	}
 	else
 	{
@@ -126,6 +127,16 @@ void APlayerCharacter::Tick(float DeltaTime)
 		{
 			m_LockOnPawnCharacter = nullptr;
 			m_LockOn = false;
+		}
+	}
+
+	if (m_DilationTime > 0.f)
+	{
+		m_DilationTime -= DeltaTime;
+
+		if (m_DilationTime <= 0.f)
+		{
+			GetWorldSettings()->SetTimeDilation(1.f);
 		}
 	}
 
@@ -222,8 +233,37 @@ void APlayerCharacter::UpdateMoveAnimation()
 			if (EToggleWalkAndRun::Run == m_ToggleWalkAndRun)
 			{
 				m_PlayerAnimInstance->SetPawnAnimType(EPawnAnimType::Run);
-			}
+			} 
 		}
+	}
+}
+
+void APlayerCharacter::NotifyAnimation(EAnimationNotifyType AnimationNotifyType, EPawnAnimType PawnAnimType, int32 Direction, ECombinationType CombinationType)
+{
+	if (EAnimationNotifyType::DefenceStart == AnimationNotifyType)
+	{
+		LOG(TEXT("Defence On"));
+		m_DefenceOn = true;
+	}
+	else if (EAnimationNotifyType::DefenceEnd == AnimationNotifyType)
+	{
+		LOG(TEXT("Defence Off"));
+		m_DefenceOn = false;
+
+		m_PawnAnimInstance->SetEnableCounter(false);
+	}
+}
+
+void APlayerCharacter::WeaponActorTakeDamage(ABaseActor* BaseActor, float Damage, float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
+{
+	if (m_DefenceOn)
+	{
+		LOG(TEXT("Counter On"));
+
+		m_DilationTime = 1.f;
+		GetWorldSettings()->SetTimeDilation(0.5f);
+
+		m_PawnAnimInstance->SetEnableCounter(true);
 	}
 }
 
@@ -433,6 +473,7 @@ void APlayerCharacter::SetPlayerClassType(EPlayerClassType PlayerClassType)
 				&& false == RSocketName.IsNone())
 			{
 				RSocketActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, RSocketName);
+				RSocketActor->SetTakeDamageCallback(this, &APlayerCharacter::WeaponActorTakeDamage);
 			}
 
 			//bool Attach = m_LHandMeshComponent->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, LSocketName);

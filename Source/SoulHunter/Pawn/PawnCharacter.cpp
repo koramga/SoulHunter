@@ -41,8 +41,6 @@ void APawnCharacter::Tick(float DeltaTime)
 		{
 			FRotator Rotator = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), m_LockOnPawnCharacter->GetActorLocation());
 
-			LOG(TEXT("Rotator : <%.2f, %.2f, %.2f>"), Rotator.Pitch, Rotator.Yaw, Rotator.Roll);
-
 			SetActorRotation(Rotator.Quaternion());
 
 			vForward = Rotator.RotateVector(FVector::ForwardVector);			
@@ -78,6 +76,15 @@ void APawnCharacter::Tick(float DeltaTime)
 
 	m_PawnAnimInstance->SetSpeed(m_Speed);
 	m_PawnAnimInstance->SetAngle(m_Angle);
+}
+
+float APawnCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
+{
+	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	LOG(TEXT("GetTakeDamage <%.2f>"), Damage);
+
+	return Damage;
 }
 
 EPawnAnimType APawnCharacter::GetPawnAnimType() const
@@ -123,6 +130,11 @@ void APawnCharacter::StartAnimationState(EPawnAnimType PawnAnimType, int32 Direc
 void APawnCharacter::StartAnimationState(EPawnAnimType PawnAnimType, int32 Direction, ECombinationType CombinationType, APawnCharacter* TargetCharacter)
 {
 	m_PawnAnimInstance->StartAnimationState(PawnAnimType, Direction, CombinationType, TargetCharacter);
+}
+
+void APawnCharacter::NotifyAnimation(EAnimationNotifyType AnimationNotifyType, EPawnAnimType PawnAnimType, int32 Direction, ECombinationType CombinationType)
+{
+
 }
 
 bool APawnCharacter::IsDeath()

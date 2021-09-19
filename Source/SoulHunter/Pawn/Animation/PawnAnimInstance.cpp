@@ -70,6 +70,54 @@ void UPawnAnimInstance::AnimNotify_DisableCounter()
 	m_PawnAnimCombo->SetEnableUpdateAnimMontage(false);
 }
 
+void UPawnAnimInstance::AnimNotify_AttackStart()
+{
+	if (IsValid(m_PawnCharacter))
+	{
+		m_PawnCharacter->NotifyAnimation(EAnimationNotifyType::AttackStart, m_PawnAnimType, m_Direction, m_CombinationType);
+	}
+}
+
+void UPawnAnimInstance::AnimNotify_AttackEnd()
+{
+	if (IsValid(m_PawnCharacter))
+	{
+		m_PawnCharacter->NotifyAnimation(EAnimationNotifyType::AttackEnd, m_PawnAnimType, m_Direction, m_CombinationType);
+	}
+}
+
+void UPawnAnimInstance::AnimNotify_CastStart()
+{
+	if (IsValid(m_PawnCharacter))
+	{
+		m_PawnCharacter->NotifyAnimation(EAnimationNotifyType::CastStart, m_PawnAnimType, m_Direction, m_CombinationType);
+	}
+}
+
+void UPawnAnimInstance::AnimNotify_CastEnd()
+{
+	if (IsValid(m_PawnCharacter))
+	{
+		m_PawnCharacter->NotifyAnimation(EAnimationNotifyType::CastEnd, m_PawnAnimType, m_Direction, m_CombinationType);
+	}
+}
+
+void UPawnAnimInstance::AnimNotify_DefenceStart()
+{
+	if (IsValid(m_PawnCharacter))
+	{
+		m_PawnCharacter->NotifyAnimation(EAnimationNotifyType::DefenceStart, m_PawnAnimType, m_Direction, m_CombinationType);
+	}
+}
+
+void UPawnAnimInstance::AnimNotify_DefenceEnd()
+{
+	if (IsValid(m_PawnCharacter))
+	{
+		m_PawnCharacter->NotifyAnimation(EAnimationNotifyType::DefenceEnd, m_PawnAnimType, m_Direction, m_CombinationType);
+	}
+}
+
 void UPawnAnimInstance::UpdatePawnType(EPawnAnimType BeforePawnAnimType, EPawnAnimType AfterPawnAnimType)
 {
 
@@ -169,6 +217,11 @@ void UPawnAnimInstance::SetDirection(int32 Direction)
 void UPawnAnimInstance::SetCombinationType(ECombinationType CombinationType)
 {
 	m_InputCombinationType = CombinationType;
+}
+
+void UPawnAnimInstance::SetEnableCounter(bool EnableCounter)
+{
+	m_PawnAnimCombo->SetEnableUpdateAnimMontage(EnableCounter);
 }
 
 EPawnAnimType UPawnAnimInstance::GetPawnAnimType() const

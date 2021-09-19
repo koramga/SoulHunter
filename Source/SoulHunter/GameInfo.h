@@ -150,3 +150,14 @@ enum class EComboType : uint8
 	Attack,
 	Defence,
 };
+
+UENUM(BlueprintType)
+enum class EAnimationNotifyType : uint8
+{
+	AttackStart,
+	AttackEnd,
+	DefenceStart,
+	DefenceEnd,
+	CastStart,
+	CastEnd,
+};

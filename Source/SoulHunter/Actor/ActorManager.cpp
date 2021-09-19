@@ -10,10 +10,9 @@ UActorManager::UActorManager()
 
 void UActorManager::Init()
 {
-	LOG(TEXT("Lance"));
 	m_mapActors.Add(TEXT("Lance"), LoadClass<ABaseActor>(this, TEXT("Blueprint'/Game/SoulHunter/Actor/Weapons/BPLancer.BPLancer_C'")));
-	LOG(TEXT("Shield"));
 	m_mapActors.Add(TEXT("Shield"), LoadClass<ABaseActor>(this, TEXT("Blueprint'/Game/SoulHunter/Actor/Weapons/BPShield.BPShield_C'")));
+	m_mapActors.Add(TEXT("Sphere"), LoadClass<ABaseActor>(this, TEXT("Blueprint'/Game/SoulHunter/Actor/Bullet/BPSphere.BPSphere_C'")));
 }
 
 ABaseActor* UActorManager::CreateActor(const FName& Name, AActor* Owner) const
@@ -25,6 +24,7 @@ ABaseActor* UActorManager::CreateActor(const FName& Name, AActor* Owner, const F
 {
 	FActorSpawnParameters param;
 
+	param.Owner = Owner;
 	param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;	
 
 	return CreateActor(Name, Owner, Location, Rotator, param);

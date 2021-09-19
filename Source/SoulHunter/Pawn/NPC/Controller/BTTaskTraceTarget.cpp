@@ -8,7 +8,7 @@
 
 UBTTaskTraceTarget::UBTTaskTraceTarget()
 {
-	NodeName = TEXT("TraceTaskTarget");
+	NodeName = TEXT("TraceTargetTask");
 	bNotifyTick = true;
 }
 
@@ -74,7 +74,6 @@ void UBTTaskTraceTarget::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Node
 	{
 		NPCAIController->StopMovement();
 		NPCAIController->EndAnimationState(EPawnAnimType::Run);
-		NPCAIController->ResetAnimationState(EPawnAnimType::Run);
 		return FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
 	}
 	
@@ -104,7 +103,6 @@ void UBTTaskTraceTarget::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Node
 		LOG(TEXT("End Animation State"));
 
 		NPCAIController->EndAnimationState(EPawnAnimType::Run);
-		NPCAIController->ResetAnimationState(EPawnAnimType::Run);
 		NPCAIController->StopMovement();
 		
 		return FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);

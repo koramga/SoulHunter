@@ -24,6 +24,9 @@ void ABaseActor::BeginPlay()
 {
 	Super::BeginPlay();
 
+	AddIgnoreActorWhenMoving(this);
+	AddIgnoreActorWhenMoving(GetOwner());
+
 	m_Body->OnComponentHit.AddDynamic(this, &ABaseActor::OnHit);
 	m_Body->OnComponentBeginOverlap.AddDynamic(this, &ABaseActor::OnOverlapBegin);
 	m_Body->OnComponentEndOverlap.AddDynamic(this, &ABaseActor::OnOverlapEnd);
@@ -39,6 +42,18 @@ void ABaseActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+float ABaseActor::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
+{
+	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	if (m_TakeDamageCallback.IsBound())
+	{
+		m_TakeDamageCallback.Execute(this, Damage, DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	}
+
+	return Damage;
 }
 
 void ABaseActor::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp

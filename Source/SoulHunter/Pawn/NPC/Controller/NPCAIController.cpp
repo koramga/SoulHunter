@@ -75,10 +75,19 @@ EPawnAnimState ANPCAIController::GetAnimationState(EPawnAnimType PawnAnimType) c
 
 void ANPCAIController::EndAnimationState(EPawnAnimType PawnAnimType)
 {
-	m_NPCCharacter->SetEndAnimationState(PawnAnimType);
+	if (IsValid(m_NPCCharacter))
+	{
+		m_NPCCharacter->SetEndAnimationState(PawnAnimType);
+
+		return m_NPCCharacter->ResetAnimationState(PawnAnimType);
+	}
+	//m_NPCCharacter->SetEndAnimationState(PawnAnimType);
 }
 
-void ANPCAIController::ResetAnimationState(EPawnAnimType PawnAnimType)
-{
-	m_NPCCharacter->ResetAnimationState(PawnAnimType);
-}
+//void ANPCAIController::ResetAnimationState(EPawnAnimType PawnAnimType)
+//{
+//	if (IsValid(m_NPCCharacter))
+//	{
+//		m_NPCCharacter->ResetAnimationState(PawnAnimType);
+//	}
+//}

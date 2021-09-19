@@ -16,4 +16,6 @@ class SOULHUNTER_API AParagonTerraCharacter : public AParagonCharacter
 public :
 	AParagonTerraCharacter();
 
+public :
+	virtual void NotifyAnimation(EAnimationNotifyType AnimationNotifyType, EPawnAnimType PawnAnimType, int32 Direction, ECombinationType CombinationType) override;
 };

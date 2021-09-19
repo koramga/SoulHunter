@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "../../../GameInfo.h"
 #include "BehaviorTree/BTTaskNode.h"
 #include "BTTaskTraceTarget.generated.h"
 
