@@ -140,16 +140,28 @@ void UPawnAnimInstance::SetPawnAnimType(EPawnAnimType PawnAnimType, bool EndAnim
 		}
 		else
 		{
-			if (m_PawnAnimCombo->IsEnableUpdateAnimMontage())
+			do
 			{
-				if (EPawnAnimType::Attack == PawnAnimType)
+				if (m_PawnAnimCombo->IsEnableUpdateAnimMontage())
 				{
-					//Combo되었다!
-					m_PawnAnimCombo->UpdateAnimMontage(this);
+					if (EPawnAnimType::Attack == PawnAnimType)
+					{
+						//Combo되었다!
+						m_PawnAnimCombo->UpdateAnimMontage(this);
+						break;
+					}
 				}
-			}
-			else
-			{
+
+				if (EPawnAnimType::Idle == PawnAnimType)
+				{
+					if (EComboType::Defence == m_PawnAnimCombo->GetComboType())
+					{
+						//이러면 이제 끝내야한다는 신호로 받아들인다.
+						m_PawnAnimCombo->EndAnimMontage(this);
+						break;
+					}
+				}
+
 				if (EPawnAnimType::Walk == PawnAnimType
 					|| EPawnAnimType::Run == PawnAnimType)
 				{
@@ -178,7 +190,10 @@ void UPawnAnimInstance::SetPawnAnimType(EPawnAnimType PawnAnimType, bool EndAnim
 						m_PawnAnimType = PawnAnimType;
 					}
 				}
-			}
+			} while (0);
+
+
+
 		}
 	}
 
@@ -196,14 +211,6 @@ void UPawnAnimInstance::SetPawnAnimType(EPawnAnimType PawnAnimType, bool EndAnim
 			UpdateSpecialAnim(m_PawnAnimCombo, EComboType::Defence , m_Direction, m_CombinationType);
 			m_PawnAnimCombo->StartAnimMontage(this);
 		}
-	}
-}
-
-void UPawnAnimInstance::SetReleasePawnAnimType(EPawnAnimType PawnAnimType)
-{
-	if (EPawnAnimType::Defence == PawnAnimType)
-	{
-		m_PawnAnimCombo->EndAnimMontage(this);
 	}
 }
 

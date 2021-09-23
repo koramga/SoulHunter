@@ -90,7 +90,6 @@ protected :
 
 public :
 	virtual void SetPawnAnimType(EPawnAnimType PawnAnimType, bool EndAnimationStateOffset = false);
-	virtual void SetReleasePawnAnimType(EPawnAnimType PawnAnimType);
 	void SetAngle(float Angle);
 	void SetSpeed(float Speed);
 	void SetDirection(int32 Direction);

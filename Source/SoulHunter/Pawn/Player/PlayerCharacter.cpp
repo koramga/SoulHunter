@@ -377,7 +377,7 @@ void APlayerCharacter::__InputDefenceKey()
 
 void APlayerCharacter::__InputDefenceReleaseKey()
 {
-	m_PlayerAnimInstance->SetReleasePawnAnimType(EPawnAnimType::Defence);
+	m_PlayerAnimInstance->SetPawnAnimType(EPawnAnimType::Idle);
 }
 
 void APlayerCharacter::__InputAttackKey()
