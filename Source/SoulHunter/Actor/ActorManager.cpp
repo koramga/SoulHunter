@@ -11,6 +11,7 @@ UActorManager::UActorManager()
 void UActorManager::Init()
 {
 	m_mapActors.Add(TEXT("Lance"), LoadClass<ABaseActor>(this, TEXT("Blueprint'/Game/SoulHunter/Actor/Weapons/BPLancer.BPLancer_C'")));
+	m_mapActors.Add(TEXT("Spear"), LoadClass<ABaseActor>(this, TEXT("Blueprint'/Game/SoulHunter/Actor/Weapons/BPSpear.BPSpear_C'")));
 	m_mapActors.Add(TEXT("Shield"), LoadClass<ABaseActor>(this, TEXT("Blueprint'/Game/SoulHunter/Actor/Weapons/BPShield.BPShield_C'")));
 	m_mapActors.Add(TEXT("Sphere"), LoadClass<ABaseActor>(this, TEXT("Blueprint'/Game/SoulHunter/Actor/Bullet/BPSphere.BPSphere_C'")));
 }

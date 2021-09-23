@@ -199,6 +199,14 @@ void UPawnAnimInstance::SetPawnAnimType(EPawnAnimType PawnAnimType, bool EndAnim
 	}
 }
 
+void UPawnAnimInstance::SetReleasePawnAnimType(EPawnAnimType PawnAnimType)
+{
+	if (EPawnAnimType::Defence == PawnAnimType)
+	{
+		m_PawnAnimCombo->EndAnimMontage(this);
+	}
+}
+
 void UPawnAnimInstance::SetAngle(float Angle)
 {
 	m_Angle = Angle;

@@ -50,6 +50,9 @@ FName ConvertPlayerClassTypeToName(EPlayerClassType PlayerClassType)
 	{
 	case EPlayerClassType::HeavyLancer :
 		return TEXT("HeavyLancer");
+
+	case EPlayerClassType::Spearman:
+		return TEXT("Spearman");
 	}
 
 	return TEXT("");

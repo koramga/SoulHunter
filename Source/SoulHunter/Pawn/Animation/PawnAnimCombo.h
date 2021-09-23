@@ -19,7 +19,7 @@ public :
 
 protected :
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
-	UAnimMontage*		m_ComboMontage;
+	UAnimMontage*		m_AnimMontage;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
 	bool				m_EnableUpdateMontage;
@@ -28,24 +28,22 @@ protected :
 	EComboType			m_ComboType;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
-	int32				m_ComboIndex;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
-	int32				m_ComboCount;
+	int32				m_AnimMontageSectionIndex;
 
 public :
 	static FName GetComboStartName(int32 ComboIndex);
 	static FName GetComboEndeName(int32 ComboIndex);
 	
 public :
-	void SetAnimMontage(UAnimMontage* AnimMontage, int32 ComboCount);
-	void SetAnimMontage(UAnimMontage* AnimMontage);
+	void SetAnimMontage(UAnimMontage* AnimMontage, EComboType ComboType = EComboType::Attack);
 	void StartAnimMontage(UAnimInstance* AnimInstance);
 	void UpdateAnimMontage(UAnimInstance* AnimInstance);
+	void EndAnimMontage(UAnimInstance* AnimInstance);
 
 public :
 	void SetEnableUpdateAnimMontage(bool EnableUpdateAnimMontage);
 
 public :
 	bool IsEnableUpdateAnimMontage() const;
+	EComboType GetComboType() const;
 };

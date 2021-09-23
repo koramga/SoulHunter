@@ -82,6 +82,7 @@ UENUM(BlueprintType)
 enum class EPlayerClassType : uint8
 {
 	HeavyLancer,
+	Spearman,
 	Max,
 };
 
@@ -99,6 +100,7 @@ UENUM(BlueprintType)
 enum class EWeaponType : uint8
 {
 	Lance,
+	Spear,
 };
 
 UENUM(BlueprintType)
@@ -148,6 +150,7 @@ UENUM(BlueprintType)
 enum class EComboType : uint8
 {
 	Attack,
+	Paring,
 	Defence,
 };
 

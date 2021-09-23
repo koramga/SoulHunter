@@ -19,6 +19,12 @@ protected :
 	TArray<UAnimMontage*>	m_HeavyLancerAttackMontage;
 	TArray<UAnimMontage*>	m_HeavyLancerStrongAttackMontage;
 	UAnimMontage*			m_HeavyLancerDefenceMontage;
+
+
+	TArray<UAnimMontage*>	m_SpearmanAttackMontage;
+	TArray<UAnimMontage*>	m_SpearmanStrongAttackMontage;
+	UAnimMontage*			m_SpearmanDefenceMontage;
+
 	bool					m_StartCombo;
 	
 public :

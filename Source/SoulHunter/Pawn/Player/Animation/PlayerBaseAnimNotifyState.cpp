@@ -17,6 +17,16 @@ void UPlayerBaseAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, U
 	AddEndAnimationSequence(TEXT("HeavyLancer_roll_left"));
 	AddEndAnimationSequence(TEXT("HeavyLancer_roll_right"));
 	AddEndAnimationSequence(TEXT("HeavyLancer_roll_back"));
+
+	AddEndAnimationSequence(TEXT("Spearman_avoid_front"));
+	AddEndAnimationSequence(TEXT("Spearman_avoid_left"));
+	AddEndAnimationSequence(TEXT("Spearman_avoid_right"));
+	AddEndAnimationSequence(TEXT("Spearman_avoid_back"));
+
+	AddEndAnimationSequence(TEXT("Spearman_roll_front"));
+	AddEndAnimationSequence(TEXT("Spearman_roll_left"));
+	AddEndAnimationSequence(TEXT("Spearman_roll_right"));
+	AddEndAnimationSequence(TEXT("Spearman_roll_back"));
 }
 
 void UPlayerBaseAnimNotifyState::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime)

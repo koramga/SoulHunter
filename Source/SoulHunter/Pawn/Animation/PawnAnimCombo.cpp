@@ -18,33 +18,31 @@ FName UPawnAnimCombo::GetComboEndeName(int32 ComboIndex)
 	return FName(*FString::Printf(TEXT("Combo%02dEnd"), ComboIndex));
 }
 
-void UPawnAnimCombo::SetAnimMontage(UAnimMontage* AnimMontage, int32 ComboCount)
+void UPawnAnimCombo::SetAnimMontage(UAnimMontage* AnimMontage, EComboType ComboType)
 {
-	m_ComboMontage = AnimMontage;
-	m_ComboCount = ComboCount;
-	m_ComboIndex = 1;
+	m_AnimMontage = AnimMontage;
+	m_AnimMontageSectionIndex = 1;
 	m_EnableUpdateMontage = false;
-	m_ComboType = EComboType::Attack;
-}
-
-void UPawnAnimCombo::SetAnimMontage(UAnimMontage* AnimMontage)
-{
-	m_ComboMontage = AnimMontage;
-	m_EnableUpdateMontage = false;
-	m_ComboType = EComboType::Defence;
+	m_ComboType = ComboType;
 }
 
 void UPawnAnimCombo::StartAnimMontage(UAnimInstance* AnimInstance)
 {
-	if (IsValid(m_ComboMontage))
+	if (IsValid(m_AnimMontage))
 	{
-		AnimInstance->Montage_Play(m_ComboMontage);
+		AnimInstance->Montage_Play(m_AnimMontage);
 
 		if (EComboType::Attack == m_ComboType)
 		{
-			AnimInstance->Montage_SetNextSection(UPawnAnimCombo::GetComboStartName(m_ComboIndex), UPawnAnimCombo::GetComboEndeName(m_ComboIndex));
+			AnimInstance->Montage_SetNextSection(UPawnAnimCombo::GetComboStartName(m_AnimMontageSectionIndex), UPawnAnimCombo::GetComboEndeName(m_AnimMontageSectionIndex));
 		}
 		else if (EComboType::Defence == m_ComboType)
+		{
+			LOG(TEXT("StartAnimMontage : Defence"));
+			AnimInstance->Montage_SetNextSection(TEXT("Start"), TEXT("Loop"));
+			AnimInstance->Montage_SetNextSection(TEXT("Loop"), TEXT("Loop"));
+		}
+		else if (EComboType::Paring == m_ComboType)
 		{
 			AnimInstance->Montage_SetNextSection(TEXT("Start"), TEXT("End"));
 			//카운터 성공하면 아래와같이 진행한다.
@@ -55,25 +53,63 @@ void UPawnAnimCombo::StartAnimMontage(UAnimInstance* AnimInstance)
 
 void UPawnAnimCombo::UpdateAnimMontage(UAnimInstance* AnimInstance)
 {
-	if (IsValid(m_ComboMontage))
+	if (IsValid(m_AnimMontage))
 	{
 		if (EComboType::Attack == m_ComboType)
 		{
-			m_ComboIndex++;
-			AnimInstance->Montage_SetNextSection(UPawnAnimCombo::GetComboStartName(m_ComboIndex - 1), UPawnAnimCombo::GetComboStartName(m_ComboIndex));
-			AnimInstance->Montage_SetNextSection(UPawnAnimCombo::GetComboStartName(m_ComboIndex), UPawnAnimCombo::GetComboEndeName(m_ComboIndex));
+			FName NextMontageSectionName = UPawnAnimCombo::GetComboStartName(m_AnimMontageSectionIndex + 1);
+
+			if (m_AnimMontage->IsValidSectionName(NextMontageSectionName))
+			{
+				AnimInstance->Montage_SetNextSection(UPawnAnimCombo::GetComboStartName(m_AnimMontageSectionIndex), NextMontageSectionName);
+				AnimInstance->Montage_SetNextSection(NextMontageSectionName, UPawnAnimCombo::GetComboEndeName(m_AnimMontageSectionIndex + 1));
+			}
+		}
+		else if (EComboType::Paring == m_ComboType)
+		{
+			//AnimInstance->Montage_SetNextSection(TEXT("Start"), TEXT("Counter"));
+			FName SectionName = AnimInstance->Montage_GetCurrentSection();
+
+			if (SectionName != TEXT("Counter"))
+			{
+				AnimInstance->Montage_JumpToSection(TEXT("Counter"));
+			}
 		}
 		else if (EComboType::Defence == m_ComboType)
 		{
-			AnimInstance->Montage_SetNextSection(TEXT("Start"), TEXT("Counter"));
+			FName SectionName = AnimInstance->Montage_GetCurrentSection();
+
+			if (SectionName != TEXT("Counter"))
+			{
+				AnimInstance->Montage_JumpToSection(TEXT("Counter"));
+			}
+		}
+	}
+}
+
+void UPawnAnimCombo::EndAnimMontage(UAnimInstance* AnimInstance)
+{
+	if (EComboType::Defence == m_ComboType)
+	{
+		FName SectionName = AnimInstance->Montage_GetCurrentSection();
+
+		if (SectionName != TEXT("End"))
+		{
+			AnimInstance->Montage_JumpToSection(TEXT("End"));
 		}
 	}
 }
 
 void UPawnAnimCombo::SetEnableUpdateAnimMontage(bool EnableUpdateAnimMontage)
 {
-	if (IsValid(m_ComboMontage))
+	if (IsValid(m_AnimMontage))
 	{
+		if (true == m_EnableUpdateMontage
+			&& false == EnableUpdateAnimMontage)
+		{
+			m_AnimMontageSectionIndex++;
+		}
+
 		m_EnableUpdateMontage = EnableUpdateAnimMontage;
 	}
 }
@@ -81,4 +117,9 @@ void UPawnAnimCombo::SetEnableUpdateAnimMontage(bool EnableUpdateAnimMontage)
 bool UPawnAnimCombo::IsEnableUpdateAnimMontage() const
 {
 	return m_EnableUpdateMontage;
+}
+
+EComboType UPawnAnimCombo::GetComboType() const
+{
+	return m_ComboType;
 }

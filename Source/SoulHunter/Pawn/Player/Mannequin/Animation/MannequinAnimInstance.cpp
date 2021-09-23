@@ -37,6 +37,39 @@ UMannequinAnimInstance::UMannequinAnimInstance()
 	if (DefenceMontageAsset.Succeeded())
 		m_HeavyLancerDefenceMontage = DefenceMontageAsset.Object;
 
+
+
+
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> SpearmanAttack01MontageAsset(TEXT("AnimMontage'/Game/SoulHunter/Pawn/Player/Mannequin/Animation/Spearman/MTMannequinSpearmanAttack01.MTMannequinSpearmanAttack01'"));
+
+	if (SpearmanAttack01MontageAsset.Succeeded())
+		m_SpearmanAttackMontage.Add(SpearmanAttack01MontageAsset.Object);
+
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> SpearmanAttack02MontageAsset(TEXT("AnimMontage'/Game/SoulHunter/Pawn/Player/Mannequin/Animation/Spearman/MTMannequinSpearmanAttack02.MTMannequinSpearmanAttack02'"));
+
+	if (SpearmanAttack02MontageAsset.Succeeded())
+		m_SpearmanAttackMontage.Add(SpearmanAttack02MontageAsset.Object);
+
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> SpearmanAttack03MontageAsset(TEXT("AnimMontage'/Game/SoulHunter/Pawn/Player/Mannequin/Animation/Spearman/MTMannequinSpearmanAttack03.MTMannequinSpearmanAttack03'"));
+
+	if (SpearmanAttack03MontageAsset.Succeeded())
+		m_SpearmanAttackMontage.Add(SpearmanAttack03MontageAsset.Object);
+
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> SpearmanAttack04MontageAsset(TEXT("AnimMontage'/Game/SoulHunter/Pawn/Player/Mannequin/Animation/Spearman/MTMannequinSpearmanAttack04.MTMannequinSpearmanAttack04'"));
+
+	if (SpearmanAttack04MontageAsset.Succeeded())
+		m_SpearmanAttackMontage.Add(SpearmanAttack04MontageAsset.Object);
+
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> SpearmanStrongAttack01MontageAsset(TEXT("AnimMontage'/Game/SoulHunter/Pawn/Player/Mannequin/Animation/Spearman/MTMannequinSpearmanStrongAttack01.MTMannequinSpearmanStrongAttack01'"));
+
+	if (SpearmanStrongAttack01MontageAsset.Succeeded())
+		m_SpearmanStrongAttackMontage.Add(SpearmanStrongAttack01MontageAsset.Object);
+
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> SpearmanDefenceMontageAsset(TEXT("AnimMontage'/Game/SoulHunter/Pawn/Player/Mannequin/Animation/Spearman/MTMannequinSpearmanDefence.MTMannequinSpearmanDefence'"));
+
+	if (SpearmanDefenceMontageAsset.Succeeded())
+		m_SpearmanDefenceMontage = SpearmanDefenceMontageAsset.Object;
+
 	m_StartCombo = false;
 }
 
@@ -57,43 +90,84 @@ void UMannequinAnimInstance::UpdatePawnType(EPawnAnimType BeforePawnAnimType, EP
 
 void UMannequinAnimInstance::UpdateSpecialAnim(UPawnAnimCombo* PawnAnimCombo, EComboType ComboType, int32 Direction, ECombinationType CombinationType)
 {
-	if (EComboType::Attack == ComboType)
+	if (EPlayerClassType::HeavyLancer == m_PlayerClassType)
 	{
-		if(ECombinationType::None == CombinationType)
+		if (EComboType::Attack == ComboType)
 		{
-			int Index = -1;
-			int ComboCount = 4;
+			if (ECombinationType::None == CombinationType)
+			{
+				int Index = -1;
 
-			if ((Direction & DIRECTION_FORWARD) > 0)
-			{
-				ComboCount = 3;
-				Index = 0;
-			}
-			else if ((Direction & DIRECTION_BACK) > 0)
-			{
-				Index = 1;				
-			}
-			else if ((Direction & DIRECTION_LEFT) > 0)
-			{
-				Index = 3;
-			}
-			else if ((Direction & DIRECTION_RIGHT) > 0)
-			{
-				Index = 2;
-			}
+				if ((Direction & DIRECTION_FORWARD) > 0)
+				{
+					Index = 0;
+				}
+				else if ((Direction & DIRECTION_BACK) > 0)
+				{
+					Index = 1;
+				}
+				else if ((Direction & DIRECTION_LEFT) > 0)
+				{
+					Index = 3;
+				}
+				else if ((Direction & DIRECTION_RIGHT) > 0)
+				{
+					Index = 2;
+				}
 
-			if (Index >= 0)
+				if (Index >= 0)
+				{
+					PawnAnimCombo->SetAnimMontage(m_HeavyLancerAttackMontage[Index]);
+				}
+			}
+			else if (ECombinationType::Strong == CombinationType)
 			{
-				PawnAnimCombo->SetAnimMontage(m_HeavyLancerAttackMontage[Index], ComboCount);
+				PawnAnimCombo->SetAnimMontage(m_HeavyLancerStrongAttackMontage[0]);
 			}
 		}
-		else if (ECombinationType::Strong == CombinationType)
+		else if (EComboType::Defence == ComboType)
 		{
-			PawnAnimCombo->SetAnimMontage(m_HeavyLancerStrongAttackMontage[0]);
+			PawnAnimCombo->SetAnimMontage(m_HeavyLancerDefenceMontage, EComboType::Paring);
 		}
 	}
-	else if (EComboType::Defence == ComboType)
+	else if (EPlayerClassType::Spearman == m_PlayerClassType)
 	{
-		PawnAnimCombo->SetAnimMontage(m_HeavyLancerDefenceMontage);
+		if (EComboType::Attack == ComboType)
+		{
+			if (ECombinationType::None == CombinationType)
+			{
+				int Index = -1;
+
+				if ((Direction & DIRECTION_FORWARD) > 0)
+				{
+					Index = 0;
+				}
+				else if ((Direction & DIRECTION_BACK) > 0)
+				{
+					Index = 1;
+				}
+				else if ((Direction & DIRECTION_LEFT) > 0)
+				{
+					Index = 3;
+				}
+				else if ((Direction & DIRECTION_RIGHT) > 0)
+				{
+					Index = 2;
+				}
+
+				if (Index >= 0)
+				{
+					PawnAnimCombo->SetAnimMontage(m_SpearmanAttackMontage[Index]);
+				}
+			}
+			else if (ECombinationType::Strong == CombinationType)
+			{
+				PawnAnimCombo->SetAnimMontage(m_SpearmanStrongAttackMontage[0]);
+			}
+		}
+		else if (EComboType::Defence == ComboType)
+		{
+			PawnAnimCombo->SetAnimMontage(m_SpearmanDefenceMontage, EComboType::Defence);
+		}
 	}
 }

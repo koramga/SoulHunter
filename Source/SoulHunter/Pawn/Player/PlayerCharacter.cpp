@@ -30,7 +30,7 @@ void APlayerCharacter::BeginPlay()
 
 	m_PlayerAnimInstance = Cast<UPlayerAnimInstance>(GetMesh()->GetAnimInstance());
 
-	SetPlayerClassType(EPlayerClassType::HeavyLancer);
+	SetPlayerClassType(EPlayerClassType::Spearman);
 
 	m_ToggleWalkAndRun = EToggleWalkAndRun::Run;
 	//m_PlayerAnimInstance->SetPlayerClassType(EPlayerClassType::Lance);
@@ -140,6 +140,8 @@ void APlayerCharacter::Tick(float DeltaTime)
 		}
 	}
 
+	//PrintViewport(1.f, FColor::Red, FString::Printf(TEXT("Speed : <%.2f>, WalkSpeed : <%.2f>"), m_Speed, m_PlayerVR->GetPlayerCharacterTableRow()->RunSpeed));
+
 	UpdateMoveAnimation();
 }
 
@@ -161,6 +163,9 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 	PlayerInputComponent->BindAction(TEXT("DefenceKey"), EInputEvent::IE_Pressed,
 		this, &APlayerCharacter::__InputDefenceKey);
+
+	PlayerInputComponent->BindAction(TEXT("DefenceKey"), EInputEvent::IE_Released,
+		this, &APlayerCharacter::__InputDefenceReleaseKey);
 
 	PlayerInputComponent->BindAction(TEXT("AttackKey"), EInputEvent::IE_Pressed,
 		this, &APlayerCharacter::__InputAttackKey);
@@ -370,6 +375,11 @@ void APlayerCharacter::__InputDefenceKey()
 	m_PlayerAnimInstance->SetPawnAnimType(EPawnAnimType::Defence);
 }
 
+void APlayerCharacter::__InputDefenceReleaseKey()
+{
+	m_PlayerAnimInstance->SetReleasePawnAnimType(EPawnAnimType::Defence);
+}
+
 void APlayerCharacter::__InputAttackKey()
 {
 	//PrintViewport(1.f, FColor::Red, TEXT("AttackKey"));
@@ -447,6 +457,13 @@ void APlayerCharacter::SetPlayerClassType(EPlayerClassType PlayerClassType)
 				LSocketActor = BASEGAMEINSTANCE->GetActorManager()->CreateActor(TEXT("Lance"), this);
 				RSocketName = L"HeavyLancerShieldSocket";
 				RSocketActor = BASEGAMEINSTANCE->GetActorManager()->CreateActor(TEXT("Shield"), this);
+				break;
+
+			case EPlayerClassType::Spearman :
+				LSocketName = L"SpearmanShieldSocket";
+				LSocketActor = BASEGAMEINSTANCE->GetActorManager()->CreateActor(TEXT("Shield"), this);
+				RSocketName = L"SpearmanWeaponSocket";
+				RSocketActor = BASEGAMEINSTANCE->GetActorManager()->CreateActor(TEXT("Spear"), this);
 				break;
 			}
 

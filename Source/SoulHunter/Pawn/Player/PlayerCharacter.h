@@ -64,6 +64,7 @@ private :
 	void __InputToggleWalkAndRun();
 	void __InputToggleKey();
 	void __InputDefenceKey();
+	void __InputDefenceReleaseKey();
 	void __InputAttackKey();
 	void __InputAvoidKey();
 	void __InputRollKey();
