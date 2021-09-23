@@ -3,6 +3,7 @@
 #pragma once
 
 #include "BaseActor.h"
+#include "Item/weaponActor.h"
 #include "UObject/NoExportTypes.h"
 #include "ActorManager.generated.h"
 

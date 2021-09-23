@@ -261,14 +261,22 @@ void APlayerCharacter::NotifyAnimation(EAnimationNotifyType AnimationNotifyType,
 
 void APlayerCharacter::WeaponActorTakeDamage(ABaseActor* BaseActor, float Damage, float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
 {
-	if (m_DefenceOn)
+	if (EActorType::Weapon == BaseActor->GetActorType())
 	{
-		LOG(TEXT("Counter On"));
+		AWeaponActor* WeaponActor = Cast<AWeaponActor>(BaseActor);
 
-		m_DilationTime = 1.f;
-		GetWorldSettings()->SetTimeDilation(0.5f);
+		if (EWeaponType::Shield == WeaponActor->GetWeaponType())
+		{
+			if (m_DefenceOn)
+			{
+				LOG(TEXT("Counter On"));
 
-		m_PawnAnimInstance->SetEnableCounter(true);
+				m_DilationTime = 1.f;
+				GetWorldSettings()->SetTimeDilation(0.5f);
+
+				m_PawnAnimInstance->SetEnableCounter(true);
+			}
+		}
 	}
 }
 
@@ -484,6 +492,7 @@ void APlayerCharacter::SetPlayerClassType(EPlayerClassType PlayerClassType)
 				&& false == LSocketName.IsNone())
 			{
 				LSocketActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, LSocketName);
+				LSocketActor->SetTakeDamageCallback(this, &APlayerCharacter::WeaponActorTakeDamage);
 			}
 
 			if (IsValid(RSocketActor)

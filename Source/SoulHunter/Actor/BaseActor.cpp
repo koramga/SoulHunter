@@ -15,6 +15,8 @@ ABaseActor::ABaseActor()
 	m_Body = CreateDefaultSubobject<UBoxComponent>(TEXT("Body"));
 	m_Body->SetupAttachment(m_Root);
 
+	m_ActorType = EActorType::None;
+
 	//m_Particle = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Particle"));
 	//m_Particle->SetupAttachment(m_Body);
 }
@@ -117,4 +119,9 @@ void ABaseActor::ClearIgnoreActorWhenMoving()
 FVector ABaseActor::GetBodyExtent() const
 {
 	return m_Body->GetScaledBoxExtent();
+}
+
+EActorType ABaseActor::GetActorType() const
+{
+	return m_ActorType;
 }

@@ -93,7 +93,8 @@ void UPawnAnimCombo::EndAnimMontage(UAnimInstance* AnimInstance)
 	{
 		FName SectionName = AnimInstance->Montage_GetCurrentSection();
 
-		if (SectionName != TEXT("End"))
+		if (SectionName == TEXT("Loop")
+			|| SectionName == TEXT("Start"))
 		{
 			AnimInstance->Montage_JumpToSection(TEXT("End"));
 		}

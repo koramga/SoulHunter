@@ -28,6 +28,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UBoxComponent* m_Body;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	EActorType		m_ActorType;
+
 protected:
 	FBaseActorHitCallback			m_HitCallback;
 	FBaseActorOverlapBeginCallback	m_OverlapBeginCallback;
@@ -99,4 +102,5 @@ public :
 
 public :
 	FVector GetBodyExtent() const;
+	EActorType GetActorType() const;
 };

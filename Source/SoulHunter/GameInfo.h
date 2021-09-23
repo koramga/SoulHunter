@@ -97,10 +97,19 @@ enum class EItemType : uint8
 };
 
 UENUM(BlueprintType)
+enum class EActorType : uint8
+{
+	None,
+	Weapon,
+	Movement,
+};
+
+UENUM(BlueprintType)
 enum class EWeaponType : uint8
 {
 	Lance,
 	Spear,
+	Shield,
 };
 
 UENUM(BlueprintType)

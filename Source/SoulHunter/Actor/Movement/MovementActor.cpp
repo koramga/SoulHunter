@@ -5,7 +5,7 @@
 
 AMovementActor::AMovementActor()
 {
-
+	m_ActorType = EActorType::Movement;
 }
 
 void AMovementActor::BeginPlay()
