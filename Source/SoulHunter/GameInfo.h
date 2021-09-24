@@ -24,6 +24,7 @@ DECLARE_LOG_CATEGORY_EXTERN(UE8, Log, All)
 void PrintViewport(float Duration, const FColor& Color, const FString& strText);
 void PlaySoundAtLocation(UWorld* World, USoundBase* Sound, const FVector& Location);
 void PlaySoundAtLocation(class APawnCharacter* PawnCharacter, USoundBase* Sound);
+void PlaySoundAtLocation(class ABaseCharacter* BaseCharacter, USoundBase* Sound);
 
 #define DIRECTION_FORWARD	0x01
 #define DIRECTION_BACK		0x02
@@ -41,11 +42,37 @@ enum class EPawnAnimType : uint8
 	Attack,
 	Avoid,
 	Roll,
+	Finisher,
+	Max,
+};
+
+UENUM(BlueprintType)
+enum class EBaseAnimType : uint8
+{
+	Idle,
+	Walk,
+	Run,
+	Death,
+	Defence,
+	Attack,
+	Avoid,
+	Roll,
+	Finisher,
 	Max,
 };
 
 UENUM(BlueprintType)
 enum class EPawnAnimState : uint8
+{
+	None,
+	Start,
+	CountEnd,
+	End,
+	Max,
+};
+
+UENUM(BlueprintType)
+enum class EBaseAnimState : uint8
 {
 	None,
 	Start,
@@ -88,6 +115,17 @@ enum class EPlayerClassType : uint8
 
 FName ConvertPlayerClassTypeToName(EPlayerClassType PlayerClassType);
 EPlayerClassType ConvertNameToPlayerClassType(const FName& Name);
+
+UENUM(BlueprintType)
+enum class EHumanClassType : uint8
+{
+	HeavyLancer,
+	Spearman,
+	Max,
+};
+
+FName ConvertHumanClassTypeToName(EHumanClassType HumanClassType);
+EHumanClassType ConvertNameToHumanClassType(const FName& Name);
 
 UENUM(BlueprintType)
 enum class EItemType : uint8
@@ -154,6 +192,17 @@ enum class ENPCAIControllerType : uint8
 
 FName ConvertNPCAIControllerTypeToName(ENPCAIControllerType NPCAIController);
 ENPCAIControllerType ConvertNameToNPCAIControllerType(const FName& Name);
+
+
+UENUM(BlueprintType)
+enum class EAIControllerType : uint8
+{
+	Base,
+	Max,
+};
+
+FName ConvertAIControllerTypeToName(EAIControllerType AIController);
+EAIControllerType ConvertNameToAIControllerType(const FName& Name);
 
 UENUM(BlueprintType)
 enum class EComboType : uint8

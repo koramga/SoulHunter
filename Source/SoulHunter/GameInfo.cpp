@@ -2,8 +2,9 @@
 
 
 #include "GameInfo.h"
-#include "Pawn/Player/Controller/UserPlayerController.h"
+#include "Controller/Player/BasePlayerController.h"
 #include "Pawn/PawnCharacter.h"
+#include "Character/BaseCharacter.h"
 
 DEFINE_LOG_CATEGORY(UE8)
 
@@ -17,7 +18,7 @@ void PlaySoundAtLocation(UWorld* World, USoundBase* Sound, const FVector& Locati
 	if (IsValid(World)
 		&& IsValid(Sound))
 	{
-		AUserPlayerController* MainPlayerController = Cast<AUserPlayerController>(UGameplayStatics::GetPlayerController(World, 0));
+		ABasePlayerController* MainPlayerController = Cast<ABasePlayerController>(UGameplayStatics::GetPlayerController(World, 0));
 
 		if (IsValid(MainPlayerController))
 		{
@@ -42,6 +43,11 @@ void PlaySoundAtLocation(UWorld* World, USoundBase* Sound, const FVector& Locati
 void PlaySoundAtLocation(APawnCharacter* PawnCharacter, USoundBase* Sound)
 {
 	return PlaySoundAtLocation(PawnCharacter->GetWorld(), Sound, PawnCharacter->GetActorLocation());
+}
+
+void PlaySoundAtLocation(class ABaseCharacter* BaseCharacter, USoundBase* Sound)
+{
+	return PlaySoundAtLocation(BaseCharacter->GetWorld(), Sound, BaseCharacter->GetActorLocation());
 }
 
 FName ConvertPlayerClassTypeToName(EPlayerClassType PlayerClassType)
@@ -71,6 +77,35 @@ EPlayerClassType ConvertNameToPlayerClassType(const FName& Name)
 	}
 
 	return EPlayerClassType::Max;
+}
+
+FName ConvertHumanClassTypeToName(EHumanClassType HumanClassType)
+{
+	switch (HumanClassType)
+	{
+	case EHumanClassType::HeavyLancer:
+		return TEXT("HeavyLancer");
+
+	case EHumanClassType::Spearman:
+		return TEXT("Spearman");
+	}
+
+	return TEXT("");
+}
+
+EHumanClassType ConvertNameToHumanClassType(const FName& Name)
+{
+	for (int i = 0; i < static_cast<int>(EHumanClassType::Max); ++i)
+	{
+		EHumanClassType Type = static_cast<EHumanClassType>(i);
+
+		if (ConvertHumanClassTypeToName(Type) == Name)
+		{
+			return Type;
+		}
+	}
+
+	return EHumanClassType::Max;
 }
 
 FName ConvertPlayerCharacterTypeToName(EPlayerCharacterType PlayerCharacterType)
@@ -183,4 +218,30 @@ ENPCAIControllerType ConvertNameToNPCAIControllerType(const FName& Name)
 	}
 
 	return ENPCAIControllerType::Max;
+}
+
+FName ConvertAIControllerTypeToName(EAIControllerType AIController)
+{
+	switch (AIController)
+	{
+	case EAIControllerType::Base :
+		return TEXT("Base");
+	}
+
+	return TEXT("Max");
+}
+
+EAIControllerType ConvertNameToAIControllerType(const FName& Name)
+{
+	for (int i = 0; i < static_cast<int>(EAIControllerType::Max); ++i)
+	{
+		EAIControllerType Type = static_cast<EAIControllerType>(i);
+
+		if (ConvertAIControllerTypeToName(Type) == Name)
+		{
+			return Type;
+		}
+	}
+
+	return EAIControllerType::Max;
 }
