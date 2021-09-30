@@ -7,6 +7,7 @@
 UBaseAnimCombo::UBaseAnimCombo()
 {
 	m_EnableUpdateMontage = false;
+	m_ComboType = EComboType::None;
 }
 
 FName UBaseAnimCombo::GetComboStartName(int32 ComboIndex)
@@ -100,6 +101,9 @@ void UBaseAnimCombo::EndAnimMontage(UAnimInstance* AnimInstance)
 			AnimInstance->Montage_JumpToSection(TEXT("End"));
 		}
 	}
+
+	m_AnimMontage = nullptr;
+	m_ComboType = EComboType::None;
 }
 
 void UBaseAnimCombo::SetEnableUpdateAnimMontage(bool EnableUpdateAnimMontage)

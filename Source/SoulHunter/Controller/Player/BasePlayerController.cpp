@@ -12,6 +12,8 @@ ABasePlayerController::ABasePlayerController()
 	{
 		m_CameraShake = CameraShake.Class;
 	}
+
+	ActorControllerType = static_cast<uint8>(EActorControllerType::BasePlayer);
 }
 
 void ABasePlayerController::BeginPlay()
@@ -72,6 +74,9 @@ void ABasePlayerController::PlayerTick(float DeltaTime)
 			}
 			else
 			{
+				int64 Count = GetMaxEnumValue<EPawnAnimState>();
+
+				LOG(TEXT("<%d>"), Count);
 			}
 		}
 
@@ -79,6 +84,30 @@ void ABasePlayerController::PlayerTick(float DeltaTime)
 		{
 			m_BaseCharacter->AddArmPitch(fDeltaY);
 		}		
+	}
+
+	if (m_BaseCharacter->GetSpeed() > 0.f)
+	{
+		if (m_BaseCharacter->IsIdleAnimation())
+		{
+			EToggleWalkAndRun ToggleWalkAndRun = m_BaseCharacter->GetToggleWalkAndRun();
+	
+			if (EToggleWalkAndRun::Walk == ToggleWalkAndRun)
+			{
+				m_BaseCharacter->SetBaseAnimType(EBaseAnimType::Walk);
+			}
+			else if (EToggleWalkAndRun::Run == ToggleWalkAndRun)
+			{
+				m_BaseCharacter->SetBaseAnimType(EBaseAnimType::Run);
+			}
+		}
+	}
+	else
+	{
+		if (m_BaseCharacter->IsMoveAnimation())
+		{
+			m_BaseCharacter->SetBaseAnimType(EBaseAnimType::Idle);
+		}
 	}
 
 	//FRotator Rotator = m_PlayerCharacter->GetActorRotation();
@@ -184,7 +213,12 @@ void ABasePlayerController::__InputDefenceReleaseKey()
 {
 	if (IsValid(m_BaseCharacter))
 	{
-		m_BaseCharacter->SetBaseAnimType(EBaseAnimType::Idle);
+		EBaseAnimType BaseAnimType = m_BaseCharacter->GetBaseAnimType();
+
+		if (EBaseAnimType::Defence == BaseAnimType)
+		{
+			m_BaseCharacter->SetEndBaseAnimType();
+		}
 	}
 }
 

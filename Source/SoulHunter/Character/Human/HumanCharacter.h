@@ -44,7 +44,10 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+protected :
+	void WeaponActorTakeDamage(class ABaseActor* BaseActor, float Damage, float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser);
+
 public:
-	void AddArmPitch(float Value);
 	void SetHumanClassType(EHumanClassType PlayerClassType);
+	
 };

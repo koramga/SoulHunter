@@ -152,16 +152,6 @@ void UBaseAnimInstance::SetBaseAnimType(EBaseAnimType BaseAnimType, bool EndAnim
 					}
 				}
 
-				if (EBaseAnimType::Idle == BaseAnimType)
-				{
-					if (EComboType::Defence == m_BaseAnimCombo->GetComboType())
-					{
-						//이러면 이제 끝내야한다는 신호로 받아들인다.
-						m_BaseAnimCombo->EndAnimMontage(this);
-						break;
-					}
-				}
-
 				if (EBaseAnimType::Walk == BaseAnimType
 					|| EBaseAnimType::Run == BaseAnimType)
 				{
@@ -211,6 +201,16 @@ void UBaseAnimInstance::SetBaseAnimType(EBaseAnimType BaseAnimType, bool EndAnim
 			UpdateSpecialAnim(m_BaseAnimCombo, EComboType::Defence, m_Direction, m_CombinationType);
 			m_BaseAnimCombo->StartAnimMontage(this);
 		}
+	}
+
+	LOG(TEXT("AnimType <%s>"), *GetEnumerationToString(m_BaseAnimType));
+}
+
+void UBaseAnimInstance::SetEndBaseAnimType()
+{
+	if (EComboType::Defence == m_BaseAnimCombo->GetComboType())
+	{
+		m_BaseAnimCombo->EndAnimMontage(this);
 	}
 }
 
@@ -274,6 +274,11 @@ void UBaseAnimInstance::SetEndAnimationState(EBaseAnimType BaseAnimType, EBaseAn
 	m_BaseAnimState->SetEndAnimationState(BaseAnimType);
 
 	//끝이났으니까
+
+	if (EComboType::None != m_BaseAnimCombo->GetComboType())
+	{
+		m_BaseAnimCombo->EndAnimMontage(this);
+	}
 
 	SetBaseAnimType(NextBaseAnimType, true);
 }

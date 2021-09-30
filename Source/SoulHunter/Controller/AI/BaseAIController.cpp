@@ -13,6 +13,8 @@ ABaseAIController::ABaseAIController()
 	m_BBTargetPawnCharacterName = TEXT("TargetPawnCharacter");
 
 	m_AIControllerType = EAIControllerType::Max;
+
+	ActorControllerType = static_cast<uint8>(EActorControllerType::BaseAI);
 }
 
 void ABaseAIController::OnPossess(APawn* InPawn)

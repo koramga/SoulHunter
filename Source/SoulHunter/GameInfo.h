@@ -31,6 +31,50 @@ void PlaySoundAtLocation(class ABaseCharacter* BaseCharacter, USoundBase* Sound)
 #define DIRECTION_LEFT		0x04
 #define DIRECTION_RIGHT		0x08
 
+template <typename Enumeration>
+static FORCEINLINE FString GetEnumerationToString(const Enumeration InValue)
+{
+	return StaticEnum<Enumeration>()->GetNameStringByValue(static_cast<int64>(InValue));
+}
+
+template <typename Enumeration>
+static FORCEINLINE FName GetEnumerationToName(const Enumeration InValue)
+{
+	return StaticEnum<Enumeration>()->GetNameByValue(static_cast<int64>(InValue));
+}
+
+template <typename Enumeration>
+static FORCEINLINE Enumeration GetNameStringToEnumeration(const FString& String)
+{
+	int64 Value = StaticEnum<Enumeration>()->GetValueByNameString(String);
+
+	if (INDEX_NONE == Value)
+	{
+
+	}
+
+	return static_cast<Enumeration>(Value);
+}
+
+template <typename Enumeration>
+int64 GetMaxEnumValue()
+{
+	return StaticEnum<Enumeration>()->GetMaxEnumValue();
+}
+
+template <typename Enumeration>
+static FORCEINLINE Enumeration GetNameToEnumeration(const FName& Name)
+{
+	int64 Value = StaticEnum<Enumeration>()->GetValueByName(Name);
+
+	if (INDEX_NONE == Value)
+	{
+
+	}
+
+	return static_cast<Enumeration>(Value);
+}
+
 UENUM(BlueprintType)
 enum class EPawnAnimType : uint8
 {
@@ -113,9 +157,6 @@ enum class EPlayerClassType : uint8
 	Max,
 };
 
-FName ConvertPlayerClassTypeToName(EPlayerClassType PlayerClassType);
-EPlayerClassType ConvertNameToPlayerClassType(const FName& Name);
-
 UENUM(BlueprintType)
 enum class EHumanClassType : uint8
 {
@@ -123,9 +164,6 @@ enum class EHumanClassType : uint8
 	Spearman,
 	Max,
 };
-
-FName ConvertHumanClassTypeToName(EHumanClassType HumanClassType);
-EHumanClassType ConvertNameToHumanClassType(const FName& Name);
 
 UENUM(BlueprintType)
 enum class EItemType : uint8
@@ -159,29 +197,18 @@ enum class EPlayerCharacterType : uint8
 	Max,
 };
 
-FName ConvertPlayerCharacterTypeToName(EPlayerCharacterType PlayerCharacterType);
-EPlayerCharacterType ConvertNameToPlayerCharacterType(const FName& Name);
-
 UENUM(BlueprintType)
 enum class EPawnCharacterType : uint8
 {
 	Player,
 	NPC,
-	Max,
 };
-
-FName ConvertPawnCharacterTypeToName(EPawnCharacterType PawnCharacterType);
-EPawnCharacterType ConvertNameToPawnCharacterType(const FName& Name);
 
 UENUM(BlueprintType)
 enum class ENPCCharacterType : uint8
 {
 	Paragon,
-	Max,
 };
-
-FName ConvertNPCCharacterTypeToName(ENPCCharacterType NPCCharacterType);
-ENPCCharacterType ConvertNameToNPCCharacterType(const FName& Name);
 
 UENUM(BlueprintType)
 enum class ENPCAIControllerType : uint8
@@ -189,9 +216,6 @@ enum class ENPCAIControllerType : uint8
 	Paragon,
 	Max,
 };
-
-FName ConvertNPCAIControllerTypeToName(ENPCAIControllerType NPCAIController);
-ENPCAIControllerType ConvertNameToNPCAIControllerType(const FName& Name);
 
 
 UENUM(BlueprintType)
@@ -201,12 +225,10 @@ enum class EAIControllerType : uint8
 	Max,
 };
 
-FName ConvertAIControllerTypeToName(EAIControllerType AIController);
-EAIControllerType ConvertNameToAIControllerType(const FName& Name);
-
 UENUM(BlueprintType)
 enum class EComboType : uint8
 {
+	None,
 	Attack,
 	Paring,
 	Defence,
@@ -221,4 +243,20 @@ enum class EAnimationNotifyType : uint8
 	DefenceEnd,
 	CastStart,
 	CastEnd,
+};
+
+UENUM(BlueprintType)
+enum class ECharacterType : uint8
+{
+	Base,
+	Human,
+};
+
+UENUM(BlueprintType)
+enum class EActorControllerType : uint8
+{
+	None,
+	BasePlayer,
+	HumanPlayer,
+	BaseAI,
 };

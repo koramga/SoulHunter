@@ -90,6 +90,7 @@ protected:
 
 public:
 	virtual void SetBaseAnimType(EBaseAnimType BaseAnimType, bool EndAnimationStateOffset = false);
+	virtual void SetEndBaseAnimType();
 	void SetAngle(float Angle);
 	void SetSpeed(float Speed);
 	void SetDirection(int32 Direction);

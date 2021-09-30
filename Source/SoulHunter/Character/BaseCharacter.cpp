@@ -21,6 +21,8 @@ ABaseCharacter::ABaseCharacter()
 
 	m_ToggleWalkAndRun = EToggleWalkAndRun::Run;
 
+	m_CharacterType = ECharacterType::Base;
+
 	//bUseControllerRotationYaw = false;
 }
 
@@ -150,7 +152,7 @@ EBaseAnimType ABaseCharacter::GetBaseAnimType() const
 	return m_BaseAnimInstance->GetBaseAnimType();
 }
 
-bool ABaseCharacter::IsDeath()
+bool ABaseCharacter::IsDeath() const
 {
 	return false;
 }
@@ -158,6 +160,51 @@ bool ABaseCharacter::IsDeath()
 bool ABaseCharacter::IsLockOn() const
 {
 	return m_LockOn;
+}
+
+float ABaseCharacter::GetAngle() const
+{
+	return m_Angle;
+}
+
+float ABaseCharacter::GetSpeed() const
+{
+	return m_Speed;
+}
+
+EToggleWalkAndRun ABaseCharacter::GetToggleWalkAndRun() const
+{
+	return m_ToggleWalkAndRun;
+}
+
+bool ABaseCharacter::IsMoveAnimation() const
+{
+	EBaseAnimType BaseAnimType = m_BaseAnimInstance->GetBaseAnimType();
+
+	if (EBaseAnimType::Walk == BaseAnimType
+		|| EBaseAnimType::Run == BaseAnimType)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool ABaseCharacter::IsIdleAnimation() const
+{
+	EBaseAnimType BaseAnimType = m_BaseAnimInstance->GetBaseAnimType();
+
+	if (EBaseAnimType::Idle == BaseAnimType)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+ECharacterType ABaseCharacter::GetCharacterType() const
+{
+	return m_CharacterType;
 }
 
 bool ABaseCharacter::CanMove() const
@@ -177,6 +224,11 @@ bool ABaseCharacter::CanMove() const
 void ABaseCharacter::SetBaseAnimType(EBaseAnimType BaseAnimType)
 {
 	m_BaseAnimInstance->SetBaseAnimType(BaseAnimType);
+}
+
+void ABaseCharacter::SetEndBaseAnimType()
+{
+	m_BaseAnimInstance->SetEndBaseAnimType();
 }
 
 void ABaseCharacter::SetDirection(int32 Direction)

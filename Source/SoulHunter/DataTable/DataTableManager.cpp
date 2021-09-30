@@ -53,8 +53,8 @@ bool UDataTableManager::SetPlayerVR(UPlayerVR* PlayerVR, EPlayerCharacterType Pl
 	{
 		PlayerVR->Clear();
 
-		FName ClassKey = ConvertPlayerClassTypeToName(PlayerClassType);
-		FName CharacterKey = ConvertPlayerCharacterTypeToName(PlayerCharacterType);
+		FName ClassKey = GetEnumerationToName(PlayerClassType);
+		FName CharacterKey = GetEnumerationToName(PlayerCharacterType);
 
 		const FPlayerCharacterTR* PlayerCharacterTR = m_PlayerCharacterDataTable->FindRow<FPlayerCharacterTR>(CharacterKey, TEXT(""));
 

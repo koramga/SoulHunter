@@ -64,4 +64,6 @@ public :
 public :
 	virtual bool IsDeath();
 	virtual bool IsLockOn() const;
+	float GetSpeed() const;
+	float GetAngle() const;
 };

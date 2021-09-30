@@ -146,3 +146,13 @@ bool APawnCharacter::IsLockOn() const
 {
 	return m_LockOn;
 }
+
+float APawnCharacter::GetSpeed() const
+{
+	return m_Speed;
+}
+
+float APawnCharacter::GetAngle() const
+{
+	return m_Angle;
+}

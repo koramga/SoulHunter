@@ -12,7 +12,9 @@ UCLASS()
 class SOULHUNTER_API UHumanAnimNotifyState : public UBaseAnimNotifyState
 {
 	GENERATED_BODY()
-	
-public :
-	UHumanAnimNotifyState();
+
+public:
+	virtual void NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration);
+	virtual void NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime);
+	virtual void NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation);
 };

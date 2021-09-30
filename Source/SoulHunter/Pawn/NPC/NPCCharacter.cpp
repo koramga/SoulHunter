@@ -6,7 +6,6 @@
 
 ANPCCharacter::ANPCCharacter()
 {
-	m_NPCCharacterType = ENPCCharacterType::Max;
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 	AIControllerClass = ANPCAIController::StaticClass();
 }

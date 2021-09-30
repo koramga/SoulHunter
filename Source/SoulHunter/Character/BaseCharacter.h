@@ -46,6 +46,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
 	EToggleWalkAndRun		m_ToggleWalkAndRun;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
+	ECharacterType			m_CharacterType;
+
 	//int32
 protected:
 	// Called when the game starts or when sBaseed
@@ -69,12 +72,19 @@ public:
 
 public:
 	EBaseAnimType GetBaseAnimType() const;
-	virtual bool IsDeath();
+	virtual bool IsDeath() const;
 	virtual bool IsLockOn() const;
 	virtual bool CanMove() const;
+	float GetAngle() const;
+	float GetSpeed() const;
+	EToggleWalkAndRun GetToggleWalkAndRun() const;
+	bool IsMoveAnimation() const;
+	bool IsIdleAnimation() const;
+	ECharacterType GetCharacterType() const;
 
 public :
 	void SetBaseAnimType(EBaseAnimType BaseAnimType);
+	void SetEndBaseAnimType();
 	void SetDirection(int32 Direction);
 	void SetCombinationType(ECombinationType CombinationType);
 	void SetToggleWalkAndRun();
