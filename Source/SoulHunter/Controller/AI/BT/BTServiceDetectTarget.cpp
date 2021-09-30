@@ -2,8 +2,8 @@
 
 
 #include "BTServiceDetectTarget.h"
-#include "NPCAIController.h"
-#include "../NPCCharacter.h"
+#include "../BaseAIController.h"
+#include "../../../Character/BaseCharacter.h"
 
 UBTServiceDetectTarget::UBTServiceDetectTarget()
 {
@@ -15,33 +15,33 @@ void UBTServiceDetectTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* 
 {
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 
-	ANPCAIController* NPCAIController = Cast<ANPCAIController>(OwnerComp.GetAIOwner());
+	ABaseAIController* BaseAIController = Cast<ABaseAIController>(OwnerComp.GetAIOwner());
 
-	if (nullptr == NPCAIController)
+	if (nullptr == BaseAIController)
 	{
-		LOG(TEXT("Cast failed from AIController to NPCAIController"));
+		LOG(TEXT("Cast failed from AIController to BaseAIController"));
 		return;
 	}
 
-	ANPCCharacter* NPCCharacter = Cast<ANPCCharacter>(NPCAIController->GetPawn());
+	ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(BaseAIController->GetPawn());
 
-	if (nullptr == NPCCharacter)
+	if (nullptr == BaseCharacter)
 	{
-		LOG(TEXT("Cast failed from APawn to NPCCharacter"));
+		LOG(TEXT("Cast failed from ABase to BaseCharacter"));
 		return;
 	}
 
-	if (NPCCharacter->IsDeath())
+	if (BaseCharacter->IsDeath())
 	{
-		NPCAIController->SetBlackboardTargetPawnCharacter(nullptr);
+		BaseAIController->SetBlackboardTargetCharacter(nullptr);
 		return;
 	}
 
-	float TraceRange = NPCAIController->GetBlackboardTraceRange();
+	float TraceRange = BaseAIController->GetBlackboardTraceRange();
 
-	FCollisionQueryParams param(NAME_None, true, NPCCharacter);
+	FCollisionQueryParams param(NAME_None, true, BaseCharacter);
 
-	FVector vLoc = NPCCharacter->GetActorLocation();
+	FVector vLoc = BaseCharacter->GetActorLocation();
 
 	TArray<FHitResult> HitResults;
 
@@ -52,21 +52,21 @@ void UBTServiceDetectTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* 
 
 	for (FHitResult& LoopHitResult : HitResults)
 	{
-		APawnCharacter* PawnCharacter = Cast<APawnCharacter>(LoopHitResult.GetActor());
+		ABaseCharacter* LoopBaseCharacter = Cast<ABaseCharacter>(LoopHitResult.GetActor());
 
-		if (nullptr == PawnCharacter)
+		if (nullptr == LoopBaseCharacter)
 		{
 			continue;
 		}
 
-		if (PawnCharacter->IsDeath())
+		if (LoopBaseCharacter->IsDeath())
 		{
 			continue;
 		}
 
-		FVector vPawnLocation = PawnCharacter->GetActorLocation();
+		FVector vLoopLocation = LoopBaseCharacter->GetActorLocation();
 
-		float Distance = FVector::Distance(vPawnLocation, vLoc);
+		float Distance = FVector::Distance(vLoopLocation, vLoc);
 
 		if (MinimumDistance <= Distance)
 		{
@@ -96,10 +96,10 @@ void UBTServiceDetectTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* 
 	if (nullptr != HitResult)
 	{
 		//특정한 알고리즘을 통해서 다수의 Target이 발견되었을 때 어떻게 할지 정의해야한다.
-		NPCAIController->SetBlackboardTargetPawnCharacter(Cast<APawnCharacter>(HitResult->GetActor()));
+		BaseAIController->SetBlackboardTargetCharacter(Cast<ABaseCharacter>(HitResult->GetActor()));
 	}
 	else
 	{
-		NPCAIController->SetBlackboardTargetPawnCharacter(nullptr);
+		BaseAIController->SetBlackboardTargetCharacter(nullptr);
 	}
 }

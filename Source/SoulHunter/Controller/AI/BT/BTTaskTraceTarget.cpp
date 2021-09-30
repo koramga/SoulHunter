@@ -2,9 +2,8 @@
 
 
 #include "BTTaskTraceTarget.h"
-#include "../../PawnCharacter.h"
-#include "NPCAIController.h"
-#include "../NPCCharacter.h"
+#include "../BaseAIController.h"
+#include "../../../Character/BaseCharacter.h"
 
 UBTTaskTraceTarget::UBTTaskTraceTarget()
 {
@@ -16,28 +15,28 @@ EBTNodeResult::Type UBTTaskTraceTarget::ExecuteTask(UBehaviorTreeComponent& Owne
 {
 	EBTNodeResult::Type eResult = Super::ExecuteTask(OwnerComp, NodeMemory);
 
-	ANPCAIController* NPCAIController = Cast<ANPCAIController>(OwnerComp.GetOwner());
+	ABaseAIController* BaseAIController = Cast<ABaseAIController>(OwnerComp.GetOwner());
 	
-	if (nullptr == NPCAIController)
+	if (nullptr == BaseAIController)
 	{
 		return EBTNodeResult::Failed;
 	}
 	
-	ANPCCharacter* NPCCharacter = Cast<ANPCCharacter>(NPCAIController->GetPawn());
+	ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(BaseAIController->GetPawn());
 	
-	if (nullptr == NPCCharacter)
+	if (nullptr == BaseCharacter)
 	{
 		return EBTNodeResult::Failed;
 	}
 	
-	if (NPCCharacter->IsDeath())
+	if (BaseCharacter->IsDeath())
 	{
 		return EBTNodeResult::Failed;
 	}
 	
-	APawnCharacter* PawnCharacter = NPCAIController->GetBlackboardTargetPawnCharacter();
+	ABaseCharacter* TargetCharacter = BaseAIController->GetBlackboardTargetCharacter();
 	
-	if (nullptr == PawnCharacter)
+	if (nullptr == TargetCharacter)
 	{
 		return EBTNodeResult::Failed;
 	}
@@ -49,50 +48,50 @@ void UBTTaskTraceTarget::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Node
 {
 	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
 
-	ANPCAIController* NPCAIController = Cast<ANPCAIController>(OwnerComp.GetOwner());
+	ABaseAIController* BaseAIController = Cast<ABaseAIController>(OwnerComp.GetOwner());
 	
-	if (nullptr == NPCAIController)
+	if (nullptr == BaseAIController)
 	{
 		return FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
 	}
 	
-	ANPCCharacter* NPCCharacter = Cast<ANPCCharacter>(NPCAIController->GetPawn());
+	ABaseCharacter* BaseCharacter = Cast<ABaseCharacter>(BaseAIController->GetPawn());
 	
-	if (nullptr == NPCCharacter)
+	if (nullptr == BaseCharacter)
 	{
 		return FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
 	}
 	
-	if (NPCCharacter->IsDeath())
+	if (BaseCharacter->IsDeath())
 	{
 		return FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
 	}
 	
-	APawnCharacter* TargetCharacter = NPCAIController->GetBlackboardTargetPawnCharacter();
+	ABaseCharacter* TargetCharacter = BaseAIController->GetBlackboardTargetCharacter();
 	
 	if (false == IsValid(TargetCharacter))
 	{
-		NPCAIController->StopMovement();
-		NPCAIController->EndAnimationState(EPawnAnimType::Run);
+		BaseAIController->StopMovement();
+		BaseAIController->EndAnimationState(EBaseAnimType::Run);
 		return FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
 	}
 	
-	EPawnAnimState PawnAnimState = NPCAIController->GetAnimationState(EPawnAnimType::Run);
+	EBaseAnimState BaseAnimState = BaseAIController->GetAnimationState(EBaseAnimType::Run);
 	
-	if (EPawnAnimState::None == PawnAnimState)
+	if (EBaseAnimState::None == BaseAnimState)
 	{
-		NPCAIController->StartAnimationState(EPawnAnimType::Run);
+		BaseAIController->StartAnimationState(EBaseAnimType::Run);
 	}
 	
 	FVector vTargetPos = TargetCharacter->GetActorLocation();
-	FVector vNPCPos = NPCCharacter->GetActorLocation();
+	FVector vNPCPos = BaseCharacter->GetActorLocation();
 	
 	if (FMath::Abs<float>(vNPCPos.Z - vTargetPos.Z) <= 150.f)
 	{
 		vTargetPos.Z = vNPCPos.Z;
 	}
 	
-	NPCAIController->MoveToLocation(vTargetPos, 0.f);	
+	BaseAIController->MoveToLocation(vTargetPos, 0.f);	
 	
 	float fDistance = FVector::Distance(vTargetPos, vNPCPos);
 	
@@ -102,8 +101,8 @@ void UBTTaskTraceTarget::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Node
 	{
 		LOG(TEXT("End Animation State"));
 
-		NPCAIController->EndAnimationState(EPawnAnimType::Run);
-		NPCAIController->StopMovement();
+		BaseAIController->EndAnimationState(EBaseAnimType::Run);
+		BaseAIController->StopMovement();
 		
 		return FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	}
