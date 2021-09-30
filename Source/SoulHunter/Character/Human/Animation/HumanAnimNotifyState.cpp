@@ -5,8 +5,6 @@
 
 void UHumanAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration)
 {
-	Super::NotifyBegin(MeshComp, Animation, TotalDuration);
-
 	AddEndAnimationSequence(TEXT("HeavyLancer_avoid_front"));
 	AddEndAnimationSequence(TEXT("HeavyLancer_avoid_left"));
 	AddEndAnimationSequence(TEXT("HeavyLancer_avoid_right"));
@@ -26,6 +24,8 @@ void UHumanAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimS
 	AddEndAnimationSequence(TEXT("Spearman_roll_left"));
 	AddEndAnimationSequence(TEXT("Spearman_roll_right"));
 	AddEndAnimationSequence(TEXT("Spearman_roll_back"));
+
+	Super::NotifyBegin(MeshComp, Animation, TotalDuration);
 }
 
 void UHumanAnimNotifyState::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime)

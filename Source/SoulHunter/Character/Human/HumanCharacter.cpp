@@ -9,7 +9,7 @@
 
 AHumanCharacter::AHumanCharacter()
 {
-	m_HumanClassType = EHumanClassType::Max;
+	m_HumanClassType = EHumanClassType::None;
 	m_CharacterType = ECharacterType::Human;
 }
 
@@ -98,7 +98,7 @@ void AHumanCharacter::BeginPlay()
 
 	m_HumanAnimInstance = Cast<UHumanAnimInstance>(GetMesh()->GetAnimInstance());
 
-	if (m_HumanClassType != EHumanClassType::Max)
+	if (m_HumanClassType != EHumanClassType::None)
 	{
 		SetHumanClassType(m_HumanClassType);
 	}

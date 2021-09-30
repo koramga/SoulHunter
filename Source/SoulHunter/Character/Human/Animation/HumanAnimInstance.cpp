@@ -5,7 +5,7 @@
 
 UHumanAnimInstance::UHumanAnimInstance()
 {
-	m_HumanClassType = EHumanClassType::Max;
+	m_HumanClassType = EHumanClassType::None;
 }
 
 EHumanClassType UHumanAnimInstance::GetHumanClassType() const

@@ -88,6 +88,11 @@ void UBaseAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSe
 			break;
 		}
 	}
+
+	if (false == m_HasEndAnimation)
+	{
+		LOG(TEXT("None End Animation : <%s>"), *SequenceName.ToString());
+	}
 	
 	if (IsValid(m_SequenceData))
 	{

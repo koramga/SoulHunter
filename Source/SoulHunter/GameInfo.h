@@ -102,7 +102,6 @@ enum class EBaseAnimType : uint8
 	Avoid,
 	Roll,
 	Finisher,
-	Max,
 };
 
 UENUM(BlueprintType)
@@ -112,7 +111,6 @@ enum class EPawnAnimState : uint8
 	Start,
 	CountEnd,
 	End,
-	Max,
 };
 
 UENUM(BlueprintType)
@@ -122,7 +120,6 @@ enum class EBaseAnimState : uint8
 	Start,
 	CountEnd,
 	End,
-	Max,
 };
 
 UENUM(BlueprintType, Meta = (Bitflags))
@@ -154,15 +151,14 @@ enum class EPlayerClassType : uint8
 {
 	HeavyLancer,
 	Spearman,
-	Max,
 };
 
 UENUM(BlueprintType)
 enum class EHumanClassType : uint8
 {
+	None,
 	HeavyLancer,
 	Spearman,
-	Max,
 };
 
 UENUM(BlueprintType)

@@ -99,7 +99,7 @@ EPawnAnimState UPawnAnimState::GetAnimationState(EPawnAnimType PawnAnimType)
 		return PawnAnimStateData->GetPawnAnimState();
 	}
 
-	return EPawnAnimState::Max;
+	return EPawnAnimState::None;
 }
 
 bool UPawnAnimState::IsFinishAnimationState(EPawnAnimType PawnAnimType) const

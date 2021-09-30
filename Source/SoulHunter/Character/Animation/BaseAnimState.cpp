@@ -99,7 +99,7 @@ EBaseAnimState UBaseAnimState::GetAnimationState(EBaseAnimType BaseAnimType)
 		return BaseAnimStateData->GetBaseAnimState();
 	}
 
-	return EBaseAnimState::Max;
+	return EBaseAnimState::None;
 }
 
 bool UBaseAnimState::IsFinishAnimationState(EBaseAnimType BaseAnimType) const

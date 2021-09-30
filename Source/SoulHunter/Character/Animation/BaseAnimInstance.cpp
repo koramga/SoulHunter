@@ -19,7 +19,9 @@ void UBaseAnimInstance::NativeInitializeAnimation()
 	m_BaseAnimState = NewObject<UBaseAnimState>(this, UBaseAnimState::StaticClass());
 	m_BaseAnimCombo = NewObject<UBaseAnimCombo>(this, UBaseAnimCombo::StaticClass());
 
-	for (int i = 0; i < static_cast<int>(EBaseAnimType::Max); ++i)
+	int AnimCount = static_cast<int>(GetMaxEnumValue<EBaseAnimType>());
+
+	for (int i = 0; i < AnimCount; ++i)
 	{
 		m_BaseAnimState->CreateAnimationState(static_cast<EBaseAnimType>(i));
 	}

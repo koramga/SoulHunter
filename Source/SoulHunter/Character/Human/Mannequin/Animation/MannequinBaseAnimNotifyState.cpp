@@ -5,8 +5,6 @@
 
 void UMannequinBaseAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration)
 {
-	Super::NotifyBegin(MeshComp, Animation, TotalDuration);
-
 	AddEndAnimationSequence(TEXT("MTMannequinHeavyLancerCombo1"));
 	AddEndAnimationSequence(TEXT("MTMannequinHeavyLancerCombo2"));
 	AddEndAnimationSequence(TEXT("MTMannequinHeavyLancerCombo3"));
@@ -24,6 +22,8 @@ void UMannequinBaseAnimNotifyState::NotifyBegin(USkeletalMeshComponent* MeshComp
 	AddEndAnimationSequence(TEXT("MTMannequinSpearmanStrongAttack01"));
 
 	AddEndAnimationSequence(TEXT("MTMannequinSpearmanDefence"));
+
+	Super::NotifyBegin(MeshComp, Animation, TotalDuration);
 }
 
 void UMannequinBaseAnimNotifyState::NotifyTick(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float FrameDeltaTime)
