@@ -120,6 +120,70 @@ void UBaseAnimInstance::AnimNotify_DefenceEnd()
 	}
 }
 
+void UBaseAnimInstance::AnimNotify_LHandStart()
+{
+	if (IsValid(m_BaseCharacter))
+	{
+		m_BaseCharacter->NotifyAnimation(EAnimationNotifyType::LHandStart, m_BaseAnimType, m_Direction, m_CombinationType);
+	}
+}
+
+void UBaseAnimInstance::AnimNotify_LHandEnd()
+{
+	if (IsValid(m_BaseCharacter))
+	{
+		m_BaseCharacter->NotifyAnimation(EAnimationNotifyType::LHandEnd , m_BaseAnimType, m_Direction, m_CombinationType);
+	}
+}
+
+void UBaseAnimInstance::AnimNotify_RHandStart()
+{
+	if (IsValid(m_BaseCharacter))
+	{
+		m_BaseCharacter->NotifyAnimation(EAnimationNotifyType::RHandStart, m_BaseAnimType, m_Direction, m_CombinationType);
+	}
+}
+
+void UBaseAnimInstance::AnimNotify_RHandEnd()
+{
+	if (IsValid(m_BaseCharacter))
+	{
+		m_BaseCharacter->NotifyAnimation(EAnimationNotifyType::RHandEnd, m_BaseAnimType, m_Direction, m_CombinationType);
+	}
+}
+
+void UBaseAnimInstance::AnimNotify_LFootStart()
+{
+	if (IsValid(m_BaseCharacter))
+	{
+		m_BaseCharacter->NotifyAnimation(EAnimationNotifyType::LFootStart, m_BaseAnimType, m_Direction, m_CombinationType);
+	}
+}
+
+void UBaseAnimInstance::AnimNotify_LFootEnd()
+{
+	if (IsValid(m_BaseCharacter))
+	{
+		m_BaseCharacter->NotifyAnimation(EAnimationNotifyType::LFootEnd, m_BaseAnimType, m_Direction, m_CombinationType);
+	}
+}
+
+void UBaseAnimInstance::AnimNotify_RFootStart()
+{
+	if (IsValid(m_BaseCharacter))
+	{
+		m_BaseCharacter->NotifyAnimation(EAnimationNotifyType::RFootStart, m_BaseAnimType, m_Direction, m_CombinationType);
+	}
+}
+
+void UBaseAnimInstance::AnimNotify_RFootEnd()
+{
+	if (IsValid(m_BaseCharacter))
+	{
+		m_BaseCharacter->NotifyAnimation(EAnimationNotifyType::RFootEnd, m_BaseAnimType, m_Direction, m_CombinationType);
+	}
+}
+
 void UBaseAnimInstance::UpdateBaseType(EBaseAnimType BeforeBaseAnimType, EBaseAnimType AfterBaseAnimType)
 {
 
@@ -264,6 +328,11 @@ int32 UBaseAnimInstance::GetDirection() const
 ECombinationType UBaseAnimInstance::GetCombinationType() const
 {
 	return m_InputCombinationType;
+}
+
+bool UBaseAnimInstance::IsEnableCounter() const
+{
+	return m_BaseAnimCombo->IsEnableUpdateAnimMontage();
 }
 
 void UBaseAnimInstance::AddEndAnimationState(EBaseAnimType BaseAnimType)

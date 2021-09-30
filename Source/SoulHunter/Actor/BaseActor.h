@@ -31,6 +31,9 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	EActorType		m_ActorType;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	FName			m_BodyCollisionProfileName;
+
 protected:
 	FBaseActorHitCallback			m_HitCallback;
 	FBaseActorOverlapBeginCallback	m_OverlapBeginCallback;
@@ -101,6 +104,10 @@ public :
 	void ClearIgnoreActorWhenMoving();
 
 public :
+	void SetEnableCollision(bool Enable);
+
+public :
 	FVector GetBodyExtent() const;
 	EActorType GetActorType() const;
+	bool IsEnableCollision() const;
 };

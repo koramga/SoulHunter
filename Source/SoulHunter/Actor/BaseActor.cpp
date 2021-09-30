@@ -29,6 +29,10 @@ void ABaseActor::BeginPlay()
 	AddIgnoreActorWhenMoving(this);
 	AddIgnoreActorWhenMoving(GetOwner());
 
+	m_BodyCollisionProfileName = m_Body->GetCollisionProfileName();
+
+	SetEnableCollision(false);
+
 	m_Body->OnComponentHit.AddDynamic(this, &ABaseActor::OnHit);
 	m_Body->OnComponentBeginOverlap.AddDynamic(this, &ABaseActor::OnOverlapBegin);
 	m_Body->OnComponentEndOverlap.AddDynamic(this, &ABaseActor::OnOverlapEnd);
@@ -44,6 +48,10 @@ void ABaseActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (m_Body->IsCollisionEnabled())
+	{
+		DrawDebugBox(GetWorld(), GetActorLocation(), m_Body->GetScaledBoxExtent(), GetActorRotation().Quaternion(), FColor::Blue);
+	}
 }
 
 float ABaseActor::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
@@ -76,11 +84,14 @@ void ABaseActor::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* Oth
 {
 	if (IsValid(OtherActor))
 	{
-		OnOverlapBeginFromBody(OverlappedComp, SweepResult);
-
-		if (m_OverlapBeginCallback.IsBound())
+		if (this != SweepResult.Actor)
 		{
-			m_OverlapBeginCallback.Execute(this, SweepResult);
+			OnOverlapBeginFromBody(OverlappedComp, SweepResult);
+
+			if (m_OverlapBeginCallback.IsBound())
+			{
+				m_OverlapBeginCallback.Execute(this, SweepResult);
+			}
 		}
 	}
 }
@@ -89,9 +100,12 @@ void ABaseActor::OnOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* 
 {
 	if (IsValid(OtherActor))
 	{
-		if (m_OverlapEndCallback.IsBound())
+		if (this != OtherActor)
 		{
-			m_OverlapEndCallback.Execute(this, OtherActor);
+			if (m_OverlapEndCallback.IsBound())
+			{
+				m_OverlapEndCallback.Execute(this, OtherActor);
+			}
 		}
 	}
 }
@@ -116,6 +130,19 @@ void ABaseActor::ClearIgnoreActorWhenMoving()
 	m_Body->ClearMoveIgnoreActors();
 }
 
+void ABaseActor::SetEnableCollision(bool Enable)
+{
+	if (false == Enable)
+	{
+		m_Body->SetCollisionEnabled(ECollisionEnabled::Type::NoCollision);
+	}
+	else
+	{
+		m_Body->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+		m_Body->SetCollisionProfileName(m_BodyCollisionProfileName);
+	}
+}
+
 FVector ABaseActor::GetBodyExtent() const
 {
 	return m_Body->GetScaledBoxExtent();
@@ -124,4 +151,9 @@ FVector ABaseActor::GetBodyExtent() const
 EActorType ABaseActor::GetActorType() const
 {
 	return m_ActorType;
+}
+
+bool ABaseActor::IsEnableCollision() const
+{
+	return m_Body->IsCollisionEnabled();
 }

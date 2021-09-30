@@ -84,6 +84,30 @@ private:
 	UFUNCTION()
 		void AnimNotify_DefenceEnd();
 
+	UFUNCTION()
+		void AnimNotify_LHandStart();
+
+	UFUNCTION()
+		void AnimNotify_LHandEnd();
+
+	UFUNCTION()
+		void AnimNotify_RHandStart();
+
+	UFUNCTION()
+		void AnimNotify_RHandEnd();
+
+	UFUNCTION()
+		void AnimNotify_LFootStart();
+
+	UFUNCTION()
+		void AnimNotify_LFootEnd();
+
+	UFUNCTION()
+		void AnimNotify_RFootStart();
+
+	UFUNCTION()
+		void AnimNotify_RFootEnd();
+
 protected:
 	virtual void UpdateBaseType(EBaseAnimType BeforeBaseAnimType, EBaseAnimType AfterBaseAnimType);
 	virtual void UpdateSpecialAnim(UBaseAnimCombo* BaseAnimCombo, EComboType ComboType, int32 Direction, ECombinationType CombinationType);
@@ -103,6 +127,7 @@ public:
 	float GetSpeed() const;
 	int32 GetDirection() const;
 	ECombinationType GetCombinationType() const;
+	bool IsEnableCounter() const;
 
 public:
 	virtual void AddEndAnimationState(EBaseAnimType BaseAnimType);

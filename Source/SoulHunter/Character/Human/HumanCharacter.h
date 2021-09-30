@@ -35,6 +35,15 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
 	float m_DilationTime;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
+	class AWeaponActor* m_LHandWeaponActor;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
+	class AWeaponActor* m_RHandWeaponActor;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"));
+	float				m_CounterTime;
+
 	//int32
 protected:
 	// Called when the game starts or when sBaseed
@@ -43,11 +52,13 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	virtual void NotifyAnimation(EAnimationNotifyType AnimationNotifyType, EBaseAnimType BaseAnimType, int32 Direction, ECombinationType CombinationType) override;
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)	override;
 
 protected :
 	void WeaponActorTakeDamage(class ABaseActor* BaseActor, float Damage, float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser);
+	void ActorOverlapBegin(class ABaseActor* BaseActor, const FHitResult& HitResult);
 
 public:
 	void SetHumanClassType(EHumanClassType PlayerClassType);
-	
 };

@@ -97,8 +97,6 @@ float ABaseCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& 
 {
 	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	LOG(TEXT("GetTakeDamage <%.2f>"), Damage);
-
 	return Damage;
 }
 

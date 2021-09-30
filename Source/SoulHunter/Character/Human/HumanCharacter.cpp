@@ -17,6 +17,20 @@ void AHumanCharacter::SetHumanClassType(EHumanClassType HumanClassType)
 {
 	m_HumanClassType = HumanClassType;
 
+	if (IsValid(m_LHandWeaponActor))
+	{
+		//LSocketActor 맞춰서 지워주기
+		m_LHandWeaponActor->Destroy();
+		m_LHandWeaponActor = nullptr;
+	}
+
+	if (IsValid(m_RHandWeaponActor))
+	{
+		//RSocketActor 맞춰서 지워주기
+		m_RHandWeaponActor->Destroy();
+		m_RHandWeaponActor = nullptr;
+	}
+
 	if (IsValid(m_HumanAnimInstance))
 	{
 		if (m_HumanAnimInstance->GetHumanClassType() != HumanClassType)
@@ -69,6 +83,8 @@ void AHumanCharacter::SetHumanClassType(EHumanClassType HumanClassType)
 			{
 				LSocketActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, LSocketName);
 				LSocketActor->SetTakeDamageCallback(this, &AHumanCharacter::WeaponActorTakeDamage);
+				LSocketActor->SetOverlapBeginCallback(this, &AHumanCharacter::ActorOverlapBegin);
+				m_LHandWeaponActor = Cast<AWeaponActor>(LSocketActor);
 			}
 
 			if (IsValid(RSocketActor)
@@ -76,6 +92,8 @@ void AHumanCharacter::SetHumanClassType(EHumanClassType HumanClassType)
 			{
 				RSocketActor->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, RSocketName);
 				RSocketActor->SetTakeDamageCallback(this, &AHumanCharacter::WeaponActorTakeDamage);
+				RSocketActor->SetOverlapBeginCallback(this, &AHumanCharacter::ActorOverlapBegin);
+				m_RHandWeaponActor = Cast<AWeaponActor>(RSocketActor);
 			}
 
 			PrintViewport(1.f, FColor::Red, GetEnumerationToString(m_HumanClassType));
@@ -117,6 +135,108 @@ void AHumanCharacter::BeginPlay()
 void AHumanCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (m_CounterTime > 0.f)
+	{
+		m_CounterTime -= DeltaTime;
+
+		if (m_CounterTime <= 0.f)
+		{
+			PrintViewport(1.f, FColor::Blue, TEXT("Counter Off"));
+
+			m_CounterTime = 0.f;
+
+			GetWorldSettings()->SetTimeDilation(1.f);
+
+			m_HumanAnimInstance->SetEnableCounter(false);
+
+		}
+	}
+}
+
+void AHumanCharacter::NotifyAnimation(EAnimationNotifyType AnimationNotifyType, EBaseAnimType BaseAnimType, int32 Direction, ECombinationType CombinationType)
+{
+	Super::NotifyAnimation(AnimationNotifyType, BaseAnimType, Direction, CombinationType);
+
+
+
+	if (EAnimationNotifyType::DefenceStart == AnimationNotifyType)
+	{
+		m_DefenceOn = true;
+	}
+	else if (EAnimationNotifyType::DefenceEnd == AnimationNotifyType)
+	{
+		//LOG(TEXT("Defence Off"));
+		m_DefenceOn = false;
+
+		m_BaseAnimInstance->SetEnableCounter(false);
+	}
+	else if (EAnimationNotifyType::LHandStart == AnimationNotifyType)
+	{
+		if (IsValid(m_LHandWeaponActor))
+		{
+			m_LHandWeaponActor->SetEnableCollision(true);
+		}
+	}
+	else if (EAnimationNotifyType::LHandEnd == AnimationNotifyType)
+	{
+		if (IsValid(m_LHandWeaponActor))
+		{
+			m_LHandWeaponActor->SetEnableCollision(false);
+		}
+	}
+	else if (EAnimationNotifyType::RHandStart == AnimationNotifyType)
+	{
+		if (IsValid(m_RHandWeaponActor))
+		{
+			m_RHandWeaponActor->SetEnableCollision(true);
+		}
+
+	}
+	else if (EAnimationNotifyType::RHandEnd == AnimationNotifyType)
+	{
+		if (IsValid(m_RHandWeaponActor))
+		{
+			m_RHandWeaponActor->SetEnableCollision(false);
+		}
+	}
+	else if (EAnimationNotifyType::LFootStart == AnimationNotifyType)
+	{
+
+	}
+	else if (EAnimationNotifyType::LFootEnd == AnimationNotifyType)
+	{
+
+	}
+	else if (EAnimationNotifyType::RFootStart == AnimationNotifyType)
+	{
+
+	}
+	else if (EAnimationNotifyType::RFootEnd == AnimationNotifyType)
+	{
+
+	}
+}
+
+float AHumanCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser)
+{
+	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	if (m_DefenceOn)
+	{
+		if (false == m_BaseAnimInstance->IsEnableCounter())
+		{
+			PrintViewport(1.f, FColor::Red, TEXT("Counter On"));
+
+			m_BaseAnimInstance->SetEnableCounter(true);
+
+			m_CounterTime = 0.5f;
+
+			GetWorldSettings()->SetTimeDilation(0.5f);
+		}
+	}
+
+	return Damage;
 }
 
 void AHumanCharacter::WeaponActorTakeDamage(ABaseActor* BaseActor, float Damage, float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -135,6 +255,30 @@ void AHumanCharacter::WeaponActorTakeDamage(ABaseActor* BaseActor, float Damage,
 				GetWorldSettings()->SetTimeDilation(0.5f);
 
 				m_HumanAnimInstance->SetEnableCounter(true);
+			}
+		}
+	}
+}
+
+void AHumanCharacter::ActorOverlapBegin(class ABaseActor* BaseActor, const FHitResult& HitResult)
+{
+	if (this == HitResult.GetActor()->GetOwner())
+	{
+		return;
+	}
+	else
+	{
+		EActorType ActorType = BaseActor->GetActorType();
+
+		if (EActorType::Weapon == ActorType)
+		{
+			AWeaponActor* WeaponActor = Cast<AWeaponActor>(BaseActor);
+
+			if (EWeaponType::Shield != WeaponActor->GetWeaponType())
+			{
+				FDamageEvent DamageEvent;
+
+				HitResult.Actor->TakeDamage(100.f, DamageEvent, GetController(), BaseActor);
 			}
 		}
 	}

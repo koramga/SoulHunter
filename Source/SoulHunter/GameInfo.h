@@ -207,6 +207,14 @@ enum class EAnimationNotifyType : uint8
 	DefenceEnd,
 	CastStart,
 	CastEnd,
+	LHandStart,
+	LHandEnd,
+	RHandStart,
+	RHandEnd,
+	LFootStart,
+	LFootEnd,
+	RFootStart,
+	RFootEnd,
 };
 
 UENUM(BlueprintType)
