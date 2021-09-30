@@ -58,6 +58,7 @@ void ABasePlayerController::PlayerTick(float DeltaTime)
 			if (EBaseAnimType::Attack != m_BaseCharacter->GetBaseAnimType()
 				&& false == m_BaseCharacter->IsLockOn())
 			{
+
 				//AddYawInput(fDeltaX);
 
 				//FRotator Rotator = m_PlayerCharacter->GetActorRotation();
@@ -74,9 +75,7 @@ void ABasePlayerController::PlayerTick(float DeltaTime)
 			}
 			else
 			{
-				int64 Count = GetMaxEnumValue<EPawnAnimState>();
 
-				LOG(TEXT("<%d>"), Count);
 			}
 		}
 

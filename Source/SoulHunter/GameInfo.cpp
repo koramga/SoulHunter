@@ -3,7 +3,6 @@
 
 #include "GameInfo.h"
 #include "Controller/Player/BasePlayerController.h"
-#include "Pawn/PawnCharacter.h"
 #include "Character/BaseCharacter.h"
 
 DEFINE_LOG_CATEGORY(UE8)
@@ -22,27 +21,22 @@ void PlaySoundAtLocation(UWorld* World, USoundBase* Sound, const FVector& Locati
 
 		if (IsValid(MainPlayerController))
 		{
-			APawnCharacter* PawnCharacter = MainPlayerController->GetPawn<APawnCharacter>();
+			ABaseCharacter* BaseCharacter = MainPlayerController->GetPawn<ABaseCharacter>();
 
-			if (IsValid(PawnCharacter))
+			if (IsValid(BaseCharacter))
 			{
 				float Volumn = 1.f;
 
-				FVector PlayerLocation = PawnCharacter->GetActorLocation();
+				FVector PlayerLocation = BaseCharacter->GetActorLocation();
 
 				float Distance = FVector::Distance(PlayerLocation, Location);
 
 				Volumn -= (1.f / 2000.f * Distance);
 
-				UGameplayStatics::PlaySoundAtLocation(World, Sound, PawnCharacter->GetActorLocation(), Volumn);
+				UGameplayStatics::PlaySoundAtLocation(World, Sound, BaseCharacter->GetActorLocation(), Volumn);
 			}
 		}
 	}
-}
-
-void PlaySoundAtLocation(APawnCharacter* PawnCharacter, USoundBase* Sound)
-{
-	return PlaySoundAtLocation(PawnCharacter->GetWorld(), Sound, PawnCharacter->GetActorLocation());
 }
 
 void PlaySoundAtLocation(class ABaseCharacter* BaseCharacter, USoundBase* Sound)

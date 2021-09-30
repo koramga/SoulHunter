@@ -23,7 +23,6 @@ DECLARE_LOG_CATEGORY_EXTERN(UE8, Log, All)
 
 void PrintViewport(float Duration, const FColor& Color, const FString& strText);
 void PlaySoundAtLocation(UWorld* World, USoundBase* Sound, const FVector& Location);
-void PlaySoundAtLocation(class APawnCharacter* PawnCharacter, USoundBase* Sound);
 void PlaySoundAtLocation(class ABaseCharacter* BaseCharacter, USoundBase* Sound);
 
 #define DIRECTION_FORWARD	0x01
@@ -76,21 +75,6 @@ static FORCEINLINE Enumeration GetNameToEnumeration(const FName& Name)
 }
 
 UENUM(BlueprintType)
-enum class EPawnAnimType : uint8
-{
-	Idle,
-	Walk,
-	Run,
-	Death,
-	Defence,
-	Attack,
-	Avoid,
-	Roll,
-	Finisher,
-	Max,
-};
-
-UENUM(BlueprintType)
 enum class EBaseAnimType : uint8
 {
 	Idle,
@@ -102,15 +86,6 @@ enum class EBaseAnimType : uint8
 	Avoid,
 	Roll,
 	Finisher,
-};
-
-UENUM(BlueprintType)
-enum class EPawnAnimState : uint8
-{
-	None,
-	Start,
-	CountEnd,
-	End,
 };
 
 UENUM(BlueprintType)
@@ -191,13 +166,6 @@ enum class EPlayerCharacterType : uint8
 	FemaleMannequin,
 	Haena,	
 	Max,
-};
-
-UENUM(BlueprintType)
-enum class EPawnCharacterType : uint8
-{
-	Player,
-	NPC,
 };
 
 UENUM(BlueprintType)
